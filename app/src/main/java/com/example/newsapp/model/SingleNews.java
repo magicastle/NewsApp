@@ -4,9 +4,10 @@ import android.provider.ContactsContract;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SingleNews {
+public class SingleNews implements Serializable {
     @SerializedName("publishTime")
     private String publishTime;
     @SerializedName("publisher")
@@ -83,12 +84,15 @@ public class SingleNews {
         this.who = who;
     }
 
+    public String getTitle() {
+        return this.title;
+    }
     public String getContent() {
-        return content;
+        return this.content;
     }
 }
 
-class ScoreAndWord{
+class ScoreAndWord implements Serializable{
     @SerializedName("score")
     private float score;
     @SerializedName("word")
@@ -101,7 +105,7 @@ class ScoreAndWord{
 
 }
 
-class Persons{
+class Persons implements Serializable{
     @SerializedName("count")
     private Integer count;
     @SerializedName("linkedURL")
@@ -116,7 +120,7 @@ class Persons{
     }
 }
 
-class Organizations{
+class Organizations implements Serializable{
     @SerializedName("count")
     private Integer count;
     @SerializedName("linkedURL")
@@ -131,7 +135,7 @@ class Organizations{
     }
 }
 
-class Locations{
+class Locations implements Serializable{
     @SerializedName("lng")
     private float lng;
     @SerializedName("count")
