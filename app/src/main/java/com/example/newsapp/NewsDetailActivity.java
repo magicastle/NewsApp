@@ -19,7 +19,8 @@ import com.google.android.material.appbar.AppBarLayout;
 
 public class NewsDetailActivity extends AppCompatActivity {
 
-    private TextView textView;
+    private TextView contentTextView;
+    private TextView titleTextView;
     private SingleNews newsDetail;
 
     @Override
@@ -29,8 +30,10 @@ public class NewsDetailActivity extends AppCompatActivity {
 
 
         // find component
-        textView = findViewById(R.id.new_detail_tv);
         newsDetail = (SingleNews) getIntent().getSerializableExtra("newsDetail");
-        textView.setText(newsDetail.getContent());
+        titleTextView = findViewById(R.id.new_detail_title_tv);
+        titleTextView.setText(newsDetail.getTitle());
+        contentTextView= findViewById(R.id.new_detail_content_tv);
+        contentTextView.setText(newsDetail.getContent());
     }
 }

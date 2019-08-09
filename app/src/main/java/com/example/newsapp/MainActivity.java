@@ -133,9 +133,6 @@ public class MainActivity extends AppCompatActivity
 
 
 
-
-
-
     // below : code come with template
     @Override
     public void onBackPressed() {
