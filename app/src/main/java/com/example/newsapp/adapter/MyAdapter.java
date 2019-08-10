@@ -28,6 +28,32 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         this.context = context;
     }
 
+
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        TextView title;
+        TextView contentAbstract;
+        TextView publishInfo;
+        OnItemClickListener onItemClickListener;
+
+        public MyViewHolder(View itemView, OnItemClickListener onItemClickListener){
+            super(itemView);
+
+            title = itemView.findViewById(R.id.item_newsTitle);
+            contentAbstract = itemView.findViewById(R.id.item_newsAbstract);
+            publishInfo = itemView.findViewById(R.id.item_newsPublishInfo);
+
+            itemView.setOnClickListener(this);
+            this.onItemClickListener = onItemClickListener;
+
+        }
+
+        @Override
+        public void onClick(View view) {
+            onItemClickListener.onItemClick(view, getAdapterPosition());
+        }
+    }
+
+
     @NonNull
     @Override
     public MyAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -41,14 +67,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         final MyViewHolder holder = holders;
         SingleNews news = newsList.get(position);
         holder.title.setText(news.getTitle());
+        holder.contentAbstract.setText(news.getAbstract());
+        holder.publishInfo.setText("  " + news.getPublisher() + "     " + news.getPublishTime());
     }
 
     @Override
     public int getItemCount() {
-        System.out.println("LIST SIZE: " + newsList.size());
         return newsList.size();
     }
-
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener){
         this.onItemClickListener = onItemClickListener;
@@ -56,24 +82,5 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
-    }
-
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView title;
-        OnItemClickListener onItemClickListener;
-
-        public MyViewHolder(View itemView, OnItemClickListener onItemClickListener){
-            super(itemView);
-
-            itemView.setOnClickListener(this);
-            title = itemView.findViewById(R.id.item_textView);
-
-            this.onItemClickListener = onItemClickListener;
-        }
-
-        @Override
-        public void onClick(View view) {
-            onItemClickListener.onItemClick(view, getAdapterPosition());
-        }
     }
 }

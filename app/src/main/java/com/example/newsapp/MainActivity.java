@@ -1,6 +1,8 @@
 package com.example.newsapp;
 
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -12,8 +14,10 @@ import com.example.newsapp.network.RetrofitClientInstance;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.provider.ContactsContract;
 import android.view.View;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
@@ -32,6 +36,10 @@ import android.view.Menu;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,14 +54,18 @@ public class MainActivity extends AppCompatActivity
     private MyAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
+    // search options
+    // TODO: make search options could change
+    private String size = "999";
+    private String startDate = "2019-07-01 13:12:45";
+    private String endDate   = "2019-08-03 18:42:20";
+    private String words = "";
+    private String category = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        progressDialog = new ProgressDialog(MainActivity.this);
-        progressDialog.setMessage("Loading....");
-        progressDialog.show();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -77,30 +89,27 @@ public class MainActivity extends AppCompatActivity
         recyclerView = findViewById(R.id.contain_main_recyclerview);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        request();
 
-        /*Button button = (Button)findViewById(R.id.main_bt);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("china");
-                Toast.makeText(MainActivity.this, "get!", Toast.LENGTH_SHORT);
-                Intent intent = new Intent(MainActivity.this, NewsDetailActivity.class);
-                startActivity(intent);
-            }
-        });*/
+        // default request news
+        request();
     }
 
     public void request(){
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setMessage("Loading....");
+        progressDialog.show();
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
         Call<NewsData> call;
-        // TODO : search keywords
-        call = service.getNews();
+        call = service.getNewsSearch(
+                MainActivity.this.size,
+                MainActivity.this.startDate,
+                MainActivity.this.endDate,
+                MainActivity.this.words,
+                MainActivity.this.category);
         call.enqueue(new Callback<NewsData>() {
             @Override
             public void onResponse(Call<NewsData> call, Response<NewsData> response) {
                 progressDialog.dismiss();
-                System.out.println("连接获取成功..");
                 newsData = response.body();
                 mAdapter = new MyAdapter(newsData, MainActivity.this);
                 recyclerView.setAdapter(mAdapter);
@@ -111,7 +120,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onFailure(Call<NewsData> call, Throwable t) {
                 progressDialog.dismiss();
-                System.out.println("连接获取失败..");
+                // TODO: load error activity
+                Toast.makeText(MainActivity.this, "Load error.... maybe retry....", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -131,8 +141,6 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-
-
     // below : code come with template
     @Override
     public void onBackPressed() {
@@ -148,6 +156,37 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        // searchView
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setQueryHint("Search Latest News...");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (query.length() > 2){
+                    //Toast.makeText(MainActivity.this, "Search clicked!", Toast.LENGTH_LONG).show();
+                    MainActivity.this.words = query;
+                    request();
+                    // TODO: add drop and refresh, use swipe
+                    //onLoadingSwipeRefresh(query);
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "Type more than two letters!", Toast.LENGTH_SHORT).show();
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        searchMenuItem.getIcon().setVisible(false, false);
         return true;
     }
 

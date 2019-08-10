@@ -90,6 +90,10 @@ public class SingleNews implements Serializable {
     public String getContent() {
         return this.content;
     }
+    public String getAbstract(){return this.content.substring(0, Math.min(this.content.length(), 110)) + "...";}
+    public String getPublisher(){return this.publisher;}
+    public String getPublishTime(){return this.publishTime;}
+
 }
 
 class ScoreAndWord implements Serializable{
