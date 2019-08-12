@@ -56,11 +56,12 @@ public class MainActivity extends AppCompatActivity
 
     // search options
     // TODO: make search options could change
-    private String size = "999";
+    private String size = "20";
     private String startDate = "2019-07-01 13:12:45";
     private String endDate   = "2019-08-03 18:42:20";
     private String words = "";
     private String category = "";
+    private String page="2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +106,9 @@ public class MainActivity extends AppCompatActivity
                 MainActivity.this.startDate,
                 MainActivity.this.endDate,
                 MainActivity.this.words,
-                MainActivity.this.category);
+                MainActivity.this.category,
+                MainActivity.this.page
+        );
         call.enqueue(new Callback<NewsData>() {
             @Override
             public void onResponse(Call<NewsData> call, Response<NewsData> response) {
@@ -167,7 +170,8 @@ public class MainActivity extends AppCompatActivity
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (query.length() > 2){
+                Toast.makeText(MainActivity.this, query, Toast.LENGTH_SHORT).show();
+                if (query.length() > 1){
                     //Toast.makeText(MainActivity.this, "Search clicked!", Toast.LENGTH_LONG).show();
                     MainActivity.this.words = query;
                     request();

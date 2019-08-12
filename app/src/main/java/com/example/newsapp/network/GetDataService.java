@@ -15,7 +15,8 @@ public interface GetDataService {
             @Query("endDate") String endDate,
             @Query("words") String words,
             // categories的参数有：娱乐、军事、教育、文化、健康、财经、体育、汽车、科技、社会
-            @Query("categories") String categories
+            @Query("categories") String categories,
+            @Query("page") String page
     );
 
 

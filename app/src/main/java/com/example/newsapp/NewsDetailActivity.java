@@ -32,7 +32,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         // find component
         newsDetail = (SingleNews) getIntent().getSerializableExtra("newsDetail");
         titleTextView = findViewById(R.id.new_detail_title_tv);
-        titleTextView.setText(newsDetail.getTitle());
+        titleTextView.setText(newsDetail.getTitle() + "\n");
         contentTextView= findViewById(R.id.new_detail_content_tv);
         contentTextView.setText(newsDetail.getContent());
     }
