@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:background="?attr/selectableItemBackground"
+            android:background="?attr/colorPrimary"
             android:foreground="?attr/selectableItemBackground"
             android:maxHeight="?attr/actionBarSize"
             android:paddingBottom="4dp"
@@ -54,6 +54,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:layout="@layout/fragment_news_list"></androidx.viewpager.widget.ViewPager>
+        tools:layout="@layout/fragment_news_list"/>
 
 </LinearLayout>

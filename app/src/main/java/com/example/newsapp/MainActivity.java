@@ -57,8 +57,6 @@ public class MainActivity extends AppCompatActivity
     private MyAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    // search options
-    // TODO: make search options could change
     private String size = "20";
     private String startDate = "2019-07-01 13:12:45";
     private String endDate   = "2021-08-03 18:42:20";
@@ -131,7 +129,11 @@ public class MainActivity extends AppCompatActivity
         titles.add("娱乐"); titles.add("军事"); titles.add("教育"); titles.add("文化"); titles.add("健康");
         titles.add("财经"); titles.add("体育"); titles.add("汽车"); titles.add("科技"); titles.add("社会");
         for(int i = 0;i < titles.size();i ++){
-            fragments.add(new NewsRecycleView());
+            NewsRecycleView nrc = new NewsRecycleView();
+            Bundle bundle = new Bundle();
+            bundle.putString("category", titles.get(i));
+            nrc.setArguments(bundle);
+            fragments.add(nrc);
         }
     }
 
