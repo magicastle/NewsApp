@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.newsapp.adapter.MyAdapter;
+import com.example.newsapp.adapter.MyPagerAdapter;
+import com.example.newsapp.layout.NewsRecycleView;
 import com.example.newsapp.model.NewsData;
 import com.example.newsapp.model.SingleNews;
 import com.example.newsapp.network.GetDataService;
@@ -14,7 +16,6 @@ import com.example.newsapp.network.RetrofitClientInstance;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import android.provider.ContactsContract;
 import android.view.View;
 
 import androidx.appcompat.widget.SearchView;
@@ -24,21 +25,23 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.view.Menu;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -58,20 +61,40 @@ public class MainActivity extends AppCompatActivity
     // TODO: make search options could change
     private String size = "20";
     private String startDate = "2019-07-01 13:12:45";
-    private String endDate   = "2019-08-03 18:42:20";
+    private String endDate   = "2021-08-03 18:42:20";
     private String words = "";
     private String category = "";
     private String page="2";
+
+    private FloatingActionButton fab;
+    private Toolbar toolbar;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
+
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private ImageView imageView;
+    private List<String> titles;
+    private List<Fragment> fragments;
+    private MyPagerAdapter myPagerAdapter;
+    private FragmentPagerAdapter fragmentPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        // initData 需要在 initView 之前完成，这样才知道要有多少个tab(fragment)需要建立
+        initData();
+        initView();
+        // request();
+    }
+
+    public void initView(){
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,20 +102,37 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
+        tabLayout = findViewById(R.id.tab_layout_news);
+        viewPager = findViewById(R.id.view_pager_news);
+        imageView = findViewById(R.id.add_channel_iv);
+
+        myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragments, titles);
+        viewPager.setAdapter(myPagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+
+        /*
         recyclerView = findViewById(R.id.contain_main_recyclerview);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        */
+    }
 
-        // default request news
-        request();
+    public void initData(){
+        titles = new ArrayList<String>();
+        fragments = new ArrayList<Fragment>();
+        titles.add("娱乐"); titles.add("军事"); titles.add("教育"); titles.add("文化"); titles.add("健康");
+        titles.add("财经"); titles.add("体育"); titles.add("汽车"); titles.add("科技"); titles.add("社会");
+        for(int i = 0;i < titles.size();i ++){
+            fragments.add(new NewsRecycleView());
+        }
     }
 
     public void request(){
