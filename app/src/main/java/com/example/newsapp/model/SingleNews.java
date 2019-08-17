@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SingleNews implements Serializable {
     @SerializedName("publishTime")
@@ -90,7 +92,13 @@ public class SingleNews implements Serializable {
     public String getContent() {
         return this.content;
     }
-    public String getAbstract(){return this.content.substring(0, Math.min(this.content.length(), 110)) + "...";}
+    public String getAbstract(){
+        String a = this.content.substring(0, Math.min(this.content.length(), 110)) + "...";
+        Pattern p = Pattern.compile("(\\s|\n)");
+        Matcher m = p.matcher(a);
+        a = m.replaceAll("");
+        return a;
+    }
     public String getPublisher(){return this.publisher;}
     public String getPublishTime(){return this.publishTime;}
 

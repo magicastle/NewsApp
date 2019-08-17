@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity
         // initData 需要在 initView 之前完成，这样才知道要有多少个tab(fragment)需要建立
         initData();
         initView();
-        // request();
     }
 
     public void initView(){

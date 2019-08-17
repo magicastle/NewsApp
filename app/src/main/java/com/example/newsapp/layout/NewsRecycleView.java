@@ -1,6 +1,7 @@
 package com.example.newsapp.layout;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.newsapp.MainActivity;
+import com.example.newsapp.NewsDetailActivity;
 import com.example.newsapp.R;
 import com.example.newsapp.adapter.MyAdapter;
 import com.example.newsapp.model.NewsData;
+import com.example.newsapp.model.SingleNews;
 import com.example.newsapp.network.GetDataService;
 import com.example.newsapp.network.RetrofitClientInstance;
 
@@ -81,7 +84,7 @@ public class NewsRecycleView extends Fragment {
                 mAdapter = new MyAdapter(newsData, getActivity());
                 recyclerView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
-                //initListener();
+                initListener();
             }
 
             @Override
@@ -89,6 +92,22 @@ public class NewsRecycleView extends Fragment {
                 progressDialog.dismiss();
                 // TODO: load error activity
                 Toast.makeText(getActivity(), "Load error.... maybe retry....", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    public void initListener(){
+        mAdapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                // prepare the data pasted from MainActivity to NewsDetail page
+                Intent intent = new Intent(getActivity(), NewsDetailActivity.class);
+                SingleNews newsDetail = newsData.getData().get(position);
+                intent.putExtra("newsDetail", newsDetail);
+
+                // start newsDetail page
+                startActivity(intent);
             }
         });
     }
