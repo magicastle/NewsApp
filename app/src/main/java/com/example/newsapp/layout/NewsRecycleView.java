@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.newsapp.MainActivity;
 import com.example.newsapp.NewsDetailActivity;
@@ -36,7 +37,7 @@ public class NewsRecycleView extends Fragment {
     private String endDate   = "2021-08-03 18:42:20";
     private String words = "";
     private String category = "";
-    private String page="2";
+    private String page="1";
 
     private ProgressDialog progressDialog;
     private NewsData newsData;
@@ -44,15 +45,19 @@ public class NewsRecycleView extends Fragment {
     private MyAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         view = inflater.inflate(R.layout.fragment_news_list, container, false);
         Bundle bundle = getArguments();
+        words = bundle.getString("words");
         category = bundle.getString("category");
-
         initView();
         request();
+        System.out.println("new build fragment news list: " + words + " " + category);
         return view;
     }
 
@@ -63,9 +68,9 @@ public class NewsRecycleView extends Fragment {
     }
 
     public void request(){
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("Loading....");
-        progressDialog.show();
+        //progressDialog = new ProgressDialog(getActivity());
+        //progressDialog.setMessage("Loading....");
+        //progressDialog.show();
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
         Call<NewsData> call;
         call = service.getNewsSearch(
@@ -79,7 +84,7 @@ public class NewsRecycleView extends Fragment {
         call.enqueue(new Callback<NewsData>() {
             @Override
             public void onResponse(Call<NewsData> call, Response<NewsData> response) {
-                progressDialog.dismiss();
+                //progressDialog.dismiss();
                 newsData = response.body();
                 mAdapter = new MyAdapter(newsData, getActivity());
                 recyclerView.setAdapter(mAdapter);
@@ -89,13 +94,15 @@ public class NewsRecycleView extends Fragment {
 
             @Override
             public void onFailure(Call<NewsData> call, Throwable t) {
-                progressDialog.dismiss();
+                // progressDialog.dismiss();
                 // TODO: load error activity
                 Toast.makeText(getActivity(), "Load error.... maybe retry....", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    // TODO: add drop and refresh, use swipe
+    //onLoadingSwipeRefresh(query);
 
     public void initListener(){
         mAdapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {

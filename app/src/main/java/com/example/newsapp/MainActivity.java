@@ -1,18 +1,12 @@
 package com.example.newsapp;
 
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.newsapp.adapter.MyAdapter;
 import com.example.newsapp.adapter.MyPagerAdapter;
 import com.example.newsapp.layout.NewsRecycleView;
-import com.example.newsapp.model.NewsData;
-import com.example.newsapp.model.SingleNews;
-import com.example.newsapp.network.GetDataService;
-import com.example.newsapp.network.RetrofitClientInstance;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -32,8 +26,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.Menu;
@@ -43,26 +35,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private NewsData newsData;
-    private ProgressDialog progressDialog;
-    private RecyclerView recyclerView;
-    private MyAdapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
-
-    private String size = "20";
-    private String startDate = "2019-07-01 13:12:45";
-    private String endDate   = "2021-08-03 18:42:20";
     private String words = "";
-    private String category = "";
-    private String page="2";
 
     private FloatingActionButton fab;
     private Toolbar toolbar;
@@ -71,11 +48,10 @@ public class MainActivity extends AppCompatActivity
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private ImageView imageView;
+    private ImageView modifyNewsChannel;
     private List<String> titles;
     private List<Fragment> fragments;
     private MyPagerAdapter myPagerAdapter;
-    private FragmentPagerAdapter fragmentPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,17 +85,12 @@ public class MainActivity extends AppCompatActivity
 
         tabLayout = findViewById(R.id.tab_layout_news);
         viewPager = findViewById(R.id.view_pager_news);
-        imageView = findViewById(R.id.add_channel_iv);
+        modifyNewsChannel = findViewById(R.id.modify_channel_iv);
+        //modifyNewsChannel.setOnClickListener(v -> startActivity(new Intent()));
 
         myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragments, titles);
         viewPager.setAdapter(myPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
-
-        /*
-        recyclerView = findViewById(R.id.contain_main_recyclerview);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        */
     }
 
     public void initData(){
@@ -128,62 +99,33 @@ public class MainActivity extends AppCompatActivity
         titles.add("娱乐"); titles.add("军事"); titles.add("教育"); titles.add("文化"); titles.add("健康");
         titles.add("财经"); titles.add("体育"); titles.add("汽车"); titles.add("科技"); titles.add("社会");
         for(int i = 0;i < titles.size();i ++){
+            // TODO : 推荐频道
             NewsRecycleView nrc = new NewsRecycleView();
             Bundle bundle = new Bundle();
+            bundle.putString("words", this.words);
             bundle.putString("category", titles.get(i));
             nrc.setArguments(bundle);
             fragments.add(nrc);
         }
     }
 
-    public void request(){
-        progressDialog = new ProgressDialog(MainActivity.this);
-        progressDialog.setMessage("Loading....");
-        progressDialog.show();
-        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
-        Call<NewsData> call;
-        call = service.getNewsSearch(
-                MainActivity.this.size,
-                MainActivity.this.startDate,
-                MainActivity.this.endDate,
-                MainActivity.this.words,
-                MainActivity.this.category,
-                MainActivity.this.page
-        );
-        call.enqueue(new Callback<NewsData>() {
-            @Override
-            public void onResponse(Call<NewsData> call, Response<NewsData> response) {
-                progressDialog.dismiss();
-                newsData = response.body();
-                mAdapter = new MyAdapter(newsData, MainActivity.this);
-                recyclerView.setAdapter(mAdapter);
-                mAdapter.notifyDataSetChanged();
-                initListener();
-            }
-
-            @Override
-            public void onFailure(Call<NewsData> call, Throwable t) {
-                progressDialog.dismiss();
-                // TODO: load error activity
-                Toast.makeText(MainActivity.this, "Load error.... maybe retry....", Toast.LENGTH_SHORT).show();
-            }
-        });
+    public void updateNewsTabs(){
+        fragments.clear();
+        System.out.println("titles size " + titles.size());
+        for(int i = 0;i < titles.size();i ++){
+            // TODO : 推荐频道
+            NewsRecycleView nrc = new NewsRecycleView();
+            Bundle bundle = new Bundle();
+            System.out.println(this.words);
+            bundle.putString("words", this.words);
+            bundle.putString("category", titles.get(i));
+            nrc.setArguments(bundle);
+            fragments.add(nrc);
+        }
+        myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragments, titles);
+        viewPager.setAdapter(myPagerAdapter);
     }
 
-    public void initListener(){
-        mAdapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                // prepare the data pasted from MainActivity to NewsDetail page
-                Intent intent = new Intent(MainActivity.this, NewsDetailActivity.class);
-                SingleNews newsDetail = newsData.getData().get(position);
-                intent.putExtra("newsDetail", newsDetail);
-
-                // start newsDetail page
-                startActivity(intent);
-            }
-        });
-    }
 
     // below : code come with template
     @Override
@@ -213,11 +155,8 @@ public class MainActivity extends AppCompatActivity
             public boolean onQueryTextSubmit(String query) {
                 Toast.makeText(MainActivity.this, query, Toast.LENGTH_SHORT).show();
                 if (query.length() > 1){
-                    //Toast.makeText(MainActivity.this, "Search clicked!", Toast.LENGTH_LONG).show();
                     MainActivity.this.words = query;
-                    request();
-                    // TODO: add drop and refresh, use swipe
-                    //onLoadingSwipeRefresh(query);
+                    updateNewsTabs();
                 }
                 else {
                     Toast.makeText(MainActivity.this, "Type more than two letters!", Toast.LENGTH_SHORT).show();
