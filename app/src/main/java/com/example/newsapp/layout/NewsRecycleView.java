@@ -65,6 +65,14 @@ public class NewsRecycleView extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerview);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Toast.makeText(getActivity(), "refreshing", Toast.LENGTH_SHORT).show();
+                request();
+            }
+        });
     }
 
     public void request(){
@@ -100,9 +108,6 @@ public class NewsRecycleView extends Fragment {
             }
         });
     }
-
-    // TODO: add drop and refresh, use swipe
-    //onLoadingSwipeRefresh(query);
 
     public void initListener(){
         mAdapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {

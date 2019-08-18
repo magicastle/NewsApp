@@ -29,4 +29,9 @@
         <item name="tabSelectedTextColor">?android:textColorPrimary</item>
     </style>
 
+    <style name="WelcomeTheme" parent="Theme.AppCompat.Light">
+        <item name="android:windowBackground">@drawable/man</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
 </resources>
