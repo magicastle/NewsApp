@@ -1,4 +1,4 @@
-package com.example.newsapp.layout;
+package com.example.newsapp.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -24,6 +24,9 @@ import com.example.newsapp.model.SingleNews;
 import com.example.newsapp.network.GetDataService;
 import com.example.newsapp.network.RetrofitClientInstance;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,6 +44,7 @@ public class NewsRecycleView extends Fragment {
 
     private ProgressDialog progressDialog;
     private NewsData newsData;
+    private List<SingleNews> newsList;
     private RecyclerView recyclerView;
     private MyAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -65,16 +69,23 @@ public class NewsRecycleView extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerview);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+        newsList = new ArrayList<SingleNews>();
+        mAdapter = new MyAdapter(newsList, getActivity());
+        recyclerView.setAdapter(mAdapter);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        //swipeRefreshLayout.setColorSchemeColors();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Toast.makeText(getActivity(), "refreshing", Toast.LENGTH_SHORT).show();
+                newsList.clear();
                 request();
+                Toast.makeText(getActivity(), "refreshed", Toast.LENGTH_SHORT).show();
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
 
+    // TODO: 让加载操作位于新线程中
     public void request(){
         //progressDialog = new ProgressDialog(getActivity());
         //progressDialog.setMessage("Loading....");
@@ -93,9 +104,7 @@ public class NewsRecycleView extends Fragment {
             @Override
             public void onResponse(Call<NewsData> call, Response<NewsData> response) {
                 //progressDialog.dismiss();
-                newsData = response.body();
-                mAdapter = new MyAdapter(newsData, getActivity());
-                recyclerView.setAdapter(mAdapter);
+                newsList.addAll(response.body().getData());
                 mAdapter.notifyDataSetChanged();
                 initListener();
             }
@@ -115,7 +124,7 @@ public class NewsRecycleView extends Fragment {
             public void onItemClick(View view, int position) {
                 // prepare the data pasted from MainActivity to NewsDetail page
                 Intent intent = new Intent(getActivity(), NewsDetailActivity.class);
-                SingleNews newsDetail = newsData.getData().get(position);
+                SingleNews newsDetail = newsList.get(position);
                 intent.putExtra("newsDetail", newsDetail);
 
                 // start newsDetail page

@@ -2,11 +2,10 @@ package com.example.newsapp;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.newsapp.adapter.MyPagerAdapter;
-import com.example.newsapp.layout.NewsRecycleView;
+import com.example.newsapp.fragment.NewsRecycleView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 

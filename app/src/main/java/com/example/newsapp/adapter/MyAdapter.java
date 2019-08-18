@@ -17,14 +17,13 @@ import com.example.newsapp.model.SingleNews;
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-    private NewsData newsData;
     private List<SingleNews> newsList;
     private Context context;
     private OnItemClickListener onItemClickListener;
 
-    public MyAdapter(NewsData newsData, Context context){
-        this.newsData = newsData;
-        this.newsList = newsData.getData();
+    //public MyAdapter(NewsData newsData, Context context){
+    public MyAdapter(List<SingleNews> newsList, Context context){
+        this.newsList = newsList;
         this.context = context;
     }
 
