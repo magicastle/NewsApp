@@ -2,10 +2,14 @@ package com.example.newsapp;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.newsapp.adapter.MyPagerAdapter;
+import com.example.newsapp.bean.NewsChannelBean;
+import com.example.newsapp.database.NewsChannelDao;
 import com.example.newsapp.fragment.NewsRecycleView;
+import com.example.newsapp.util.Constant;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -52,11 +56,15 @@ public class MainActivity extends AppCompatActivity
     private List<Fragment> fragments;
     private MyPagerAdapter myPagerAdapter;
 
+    public static Context globalContext;
+    private NewsChannelDao dao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        globalContext = getApplicationContext();
         // initData 需要在 initView 之前完成，这样才知道要有多少个tab(fragment)需要建立
         initData();
         initView();
@@ -85,7 +93,12 @@ public class MainActivity extends AppCompatActivity
         tabLayout = findViewById(R.id.tab_layout_news);
         viewPager = findViewById(R.id.view_pager_news);
         modifyNewsChannel = findViewById(R.id.modify_channel_iv);
-        //modifyNewsChannel.setOnClickListener(v -> startActivity(new Intent()));
+        modifyNewsChannel.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, NewsChannelActivity.class));
+            }
+        });
 
         myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragments, titles);
         viewPager.setAdapter(myPagerAdapter);
@@ -93,19 +106,41 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void initData(){
-        titles = new ArrayList<String>();
-        fragments = new ArrayList<Fragment>();
-        titles.add("娱乐"); titles.add("军事"); titles.add("教育"); titles.add("文化"); titles.add("健康");
-        titles.add("财经"); titles.add("体育"); titles.add("汽车"); titles.add("科技"); titles.add("社会");
-        for(int i = 0;i < titles.size();i ++){
-            // TODO : 推荐频道
+        dao = new NewsChannelDao();
+        titles = new ArrayList<>();
+        fragments = new ArrayList<>();
+
+        // TODO: categoryName - fragment hashmap
+        List<NewsChannelBean> channelList = dao.query(Constant.NEWS_CHANNEL_ENABLE);
+        titles = new ArrayList<>();
+        if (channelList.size() == 0) {
+            dao.addInitData();
+            channelList = dao.query(Constant.NEWS_CHANNEL_ENABLE);
+        }
+
+
+        for (NewsChannelBean bean : channelList) {
+            titles.add(bean.getChannelName());
             NewsRecycleView nrc = new NewsRecycleView();
             Bundle bundle = new Bundle();
             bundle.putString("words", this.words);
-            bundle.putString("category", titles.get(i));
+            bundle.putString("category", bean.getChannelName());
             nrc.setArguments(bundle);
             fragments.add(nrc);
         }
+
+
+//        titles.add("娱乐"); titles.add("军事"); titles.add("教育"); titles.add("文化"); titles.add("健康");
+//        titles.add("财经"); titles.add("体育"); titles.add("汽车"); titles.add("科技"); titles.add("社会");
+//        for(int i = 0;i < titles.size();i ++){
+//            // TODO : 推荐频道
+//            NewsRecycleView nrc = new NewsRecycleView();
+//            Bundle bundle = new Bundle();
+//            bundle.putString("words", this.words);
+//            bundle.putString("category", titles.get(i));
+//            nrc.setArguments(bundle);
+//            fragments.add(nrc);
+//        }
     }
 
     public void updateNewsTabs(){

@@ -33,6 +33,9 @@
             android:name=".NewsDetailActivity"
             android:label="NewsDetail"
             />
+        <activity android:name=".NewsChannelActivity"
+            android:label="Channel Manager"
+            />
     </application>
 
 </manifest>
