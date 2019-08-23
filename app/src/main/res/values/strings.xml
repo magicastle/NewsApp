@@ -14,4 +14,7 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
     <string name="channel_manager">Channel Manager</string>
+    <string name="item_channel_enable_header">Enable Categorys</string>
+    <string name="item_channel_disable_header">Disable Categorys</string>
+    <string name="item_channel_help">点击启用/禁用类别，长按拖动排序</string>
 </resources>

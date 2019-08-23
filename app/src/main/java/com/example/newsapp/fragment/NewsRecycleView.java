@@ -15,10 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.newsapp.MainActivity;
 import com.example.newsapp.NewsDetailActivity;
 import com.example.newsapp.R;
-import com.example.newsapp.adapter.MyAdapter;
+import com.example.newsapp.adapter.MyNewsListAdapter;
 import com.example.newsapp.model.NewsData;
 import com.example.newsapp.model.SingleNews;
 import com.example.newsapp.network.GetDataService;
@@ -46,7 +45,7 @@ public class NewsRecycleView extends Fragment {
     private NewsData newsData;
     private List<SingleNews> newsList;
     private RecyclerView recyclerView;
-    private MyAdapter mAdapter;
+    private MyNewsListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -70,7 +69,7 @@ public class NewsRecycleView extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         newsList = new ArrayList<SingleNews>();
-        mAdapter = new MyAdapter(newsList, getActivity());
+        mAdapter = new MyNewsListAdapter(newsList, getActivity());
         recyclerView.setAdapter(mAdapter);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         //swipeRefreshLayout.setColorSchemeColors();
@@ -119,7 +118,7 @@ public class NewsRecycleView extends Fragment {
     }
 
     public void initListener(){
-        mAdapter.setOnItemClickListener(new MyAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new MyNewsListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 // prepare the data pasted from MainActivity to NewsDetail page

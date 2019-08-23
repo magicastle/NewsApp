@@ -4,29 +4,25 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.newsapp.R;
-import com.example.newsapp.model.NewsData;
 import com.example.newsapp.model.SingleNews;
 
 import java.util.List;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+public class MyNewsListAdapter extends RecyclerView.Adapter<MyNewsListAdapter.MyViewHolder> {
     private List<SingleNews> newsList;
     private Context context;
     private OnItemClickListener onItemClickListener;
 
-    //public MyAdapter(NewsData newsData, Context context){
-    public MyAdapter(List<SingleNews> newsList, Context context){
+    public MyNewsListAdapter(List<SingleNews> newsList, Context context){
         this.newsList = newsList;
         this.context = context;
     }
-
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView title;
@@ -52,12 +48,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         }
     }
 
-
     @NonNull
     @Override
-    public MyAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyNewsListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context)
-                .inflate(R.layout.item, parent, false);
+                .inflate(R.layout.item_news_list, parent, false);
         return new MyViewHolder(view, onItemClickListener);
     }
 
