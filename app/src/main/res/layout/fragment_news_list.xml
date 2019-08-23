@@ -18,7 +18,6 @@
             android:layout_height="match_parent"
             android:fadeScrollbars="true"
             android:scrollbarFadeDuration="1"
-            android:elevation="12dp"
             android:scrollbars="vertical"
             app:layoutManager="LinearLayoutManager">
 
@@ -36,5 +35,6 @@
 </LinearLayout>
 
     <!--add to recycleview-->
+    <!--android:elevation="12dp"-->
     <!--android:outlineProvider="bounds"-->
     <!--android:clipToPadding="false"-->
