@@ -47,16 +47,27 @@
         android:text="Title"
         android:textSize="26dp" />
 
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/new_detail_content_tv"
-            android:text="Content"
-            android:textSize="14dp"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <ImageView
+                android:id="@+id/news_image"
+                android:layout_width="match_parent"
+                android:layout_height="360dp"/>
+
+            <TextView
+                android:id="@+id/new_detail_content_tv"
+                android:text="Content"
+                android:textSize="18dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
     </ScrollView>
 </LinearLayout>

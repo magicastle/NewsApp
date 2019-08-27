@@ -1,13 +1,15 @@
 package com.example.newsapp.model;
 
-import android.provider.ContactsContract;
-
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import java.net.URL;
+
 
 public class SingleNews implements Serializable {
     @SerializedName("publishTime")
@@ -101,6 +103,19 @@ public class SingleNews implements Serializable {
     }
     public String getPublisher(){return this.publisher;}
     public String getPublishTime(){return this.publishTime;}
+    public String[] getImage()
+    {
+        //System.out.println("image is "+image);
+        image=image.substring(1,image.length()-1);
+        //System.out.println("image iss "+image);
+        String[] images;
+        if(image.length()>0)
+            images=image.split(",");
+        else images=new String[0];
+        System.out.println("images.length="+images.length);
+        System.out.println(Arrays.asList(images));
+        return images;
+    }
 
 }
 
