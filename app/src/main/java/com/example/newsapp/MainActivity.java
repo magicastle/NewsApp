@@ -31,6 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.Menu;
 import android.widget.ImageView;
@@ -134,7 +135,7 @@ public class MainActivity extends AppCompatActivity
         fragments.clear();
         channelList.clear();
         channelList = dao.query(Constant.NEWS_CHANNEL_ENABLE);
-        //System.out.println("titles size " + titles.size());
+        System.out.println("channel list size " + channelList.size());
 
         for (NewsChannelBean bean : channelList) {
             // TODO : 推荐频道
@@ -146,10 +147,10 @@ public class MainActivity extends AppCompatActivity
             fragments.add(nrc);
         }
 
-        // TODO: apply notifyDataSetChanged
         myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragments, channelList);
         viewPager.setAdapter(myPagerAdapter);
 
+        // 因为 viewpager notifydatasetchanged 本身有一些问题，查阅资料后发现是无法使用的
         //myPagerAdapter.notifyDataSetChanged();
     }
 
