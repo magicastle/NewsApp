@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.newsapp.Interfaces.OnMyChannelItemDragListener;
 import com.example.newsapp.Interfaces.OnMyChannelItemMoveListener;
 import com.example.newsapp.R;
 
@@ -42,5 +43,27 @@ public class ItemDragHelperCallback extends ItemTouchHelper.Callback {
         return false;
     }
 
-    // TODO: add drag color blacker
+    /*
+        为了让item选中时颜色变黑，凸显选中状态, 通过增加接口 OnMyChannelItemDragListener 实现
+        分别重写 onSelectedChanged clearView 函数
+    */
+    @Override
+    public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+        if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
+            if (viewHolder instanceof OnMyChannelItemDragListener) {
+                OnMyChannelItemDragListener itemViewHolder = (OnMyChannelItemDragListener) viewHolder;
+                itemViewHolder.onItemSelected();
+            }
+        }
+        super.onSelectedChanged(viewHolder, actionState);
+    }
+
+    @Override
+    public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        if (viewHolder instanceof OnMyChannelItemDragListener) {
+            OnMyChannelItemDragListener itemViewHolder = (OnMyChannelItemDragListener) viewHolder;
+            itemViewHolder.onItemFinished();
+        }
+        super.clearView(recyclerView, viewHolder);
+    }
 }

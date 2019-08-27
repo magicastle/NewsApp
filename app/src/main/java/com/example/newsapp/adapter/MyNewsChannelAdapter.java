@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.newsapp.Interfaces.OnMyChannelItemClickListener;
+import com.example.newsapp.Interfaces.OnMyChannelItemDragListener;
 import com.example.newsapp.Interfaces.OnMyChannelItemMoveListener;
 import com.example.newsapp.R;
 import com.example.newsapp.bean.NewsChannelBean;
@@ -40,7 +40,6 @@ public class MyNewsChannelAdapter extends RecyclerView.Adapter<RecyclerView.View
     private LayoutInflater layoutInflater;
     private ItemTouchHelper itemTouchHelper;
     private List<NewsChannelBean> enableItems, disableItems;
-    private OnMyChannelItemClickListener onMyChannelItemClickListener;
     private Handler delayHandler = new Handler();
 
     public MyNewsChannelAdapter(Context context, ItemTouchHelper helper, List<NewsChannelBean> enableItems, List<NewsChannelBean> disableItems){
@@ -327,11 +326,26 @@ public class MyNewsChannelAdapter extends RecyclerView.Adapter<RecyclerView.View
             super(itemView);
         }
     }
-    class EnableItemHolder extends RecyclerView.ViewHolder{
+    class EnableItemHolder extends RecyclerView.ViewHolder implements OnMyChannelItemDragListener {
         public TextView textView;
         public EnableItemHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.item_channel_enable_tv);
+        }
+        /**
+         * item 被选中时
+         */
+        @Override
+        public void onItemSelected() {
+            textView.setBackgroundResource(R.color.textColorPrimary);
+        }
+
+        /**
+         * item 取消选中时
+         */
+        @Override
+        public void onItemFinished() {
+            textView.setBackgroundResource(R.color.viewBackground);
         }
     }
     class DisableItemHolder extends RecyclerView.ViewHolder{

@@ -33,7 +33,6 @@ import retrofit2.Response;
 public class NewsRecycleView extends Fragment {
     private View view;
     // search options
-    // TODO: make search options could change
     private String size = "20";
     private String startDate = "2019-07-01 13:12:45";
     private String endDate   = "2021-08-03 18:42:20";
