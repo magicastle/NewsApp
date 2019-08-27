@@ -15,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -48,16 +49,19 @@ public class MainActivity extends AppCompatActivity
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private NavigationView navigationView;
+    private final int ACTIVITY_TYPE_CHANNEL_MANAGER = 1;
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ImageView modifyNewsChannel;
-    private List<String> titles;
+    private List<NewsChannelBean> channelList;
     private List<Fragment> fragments;
     private MyPagerAdapter myPagerAdapter;
 
     public static Context globalContext;
     private NewsChannelDao dao;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,31 +100,44 @@ public class MainActivity extends AppCompatActivity
         modifyNewsChannel.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, NewsChannelActivity.class));
+                startActivityForResult(new Intent(MainActivity.this, NewsChannelActivity.class), ACTIVITY_TYPE_CHANNEL_MANAGER);
             }
         });
 
-        myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragments, titles);
+        myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragments, channelList);
         viewPager.setAdapter(myPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
 
     public void initData(){
         dao = new NewsChannelDao();
-        titles = new ArrayList<>();
         fragments = new ArrayList<>();
 
         // TODO: categoryName - fragment hashmap
-        List<NewsChannelBean> channelList = dao.query(Constant.NEWS_CHANNEL_ENABLE);
-        titles = new ArrayList<>();
+        channelList = dao.query(Constant.NEWS_CHANNEL_ENABLE);
         if (channelList.size() == 0) {
             dao.addInitData();
             channelList = dao.query(Constant.NEWS_CHANNEL_ENABLE);
         }
 
+        for (NewsChannelBean bean : channelList) {
+            NewsRecycleView nrc = new NewsRecycleView();
+            Bundle bundle = new Bundle();
+            bundle.putString("words", this.words);
+            bundle.putString("category", bean.getChannelName());
+            nrc.setArguments(bundle);
+            fragments.add(nrc);
+        }
+    }
+
+    public void updateNewsTabs(){
+        fragments.clear();
+        channelList.clear();
+        channelList = dao.query(Constant.NEWS_CHANNEL_ENABLE);
+        //System.out.println("titles size " + titles.size());
 
         for (NewsChannelBean bean : channelList) {
-            titles.add(bean.getChannelName());
+            // TODO : 推荐频道
             NewsRecycleView nrc = new NewsRecycleView();
             Bundle bundle = new Bundle();
             bundle.putString("words", this.words);
@@ -129,35 +146,21 @@ public class MainActivity extends AppCompatActivity
             fragments.add(nrc);
         }
 
+        // TODO: apply notifyDataSetChanged
+        myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragments, channelList);
+        viewPager.setAdapter(myPagerAdapter);
 
-//        titles.add("娱乐"); titles.add("军事"); titles.add("教育"); titles.add("文化"); titles.add("健康");
-//        titles.add("财经"); titles.add("体育"); titles.add("汽车"); titles.add("科技"); titles.add("社会");
-//        for(int i = 0;i < titles.size();i ++){
-//            // TODO : 推荐频道
-//            NewsRecycleView nrc = new NewsRecycleView();
-//            Bundle bundle = new Bundle();
-//            bundle.putString("words", this.words);
-//            bundle.putString("category", titles.get(i));
-//            nrc.setArguments(bundle);
-//            fragments.add(nrc);
-//        }
+        //myPagerAdapter.notifyDataSetChanged();
     }
 
-    public void updateNewsTabs(){
-        fragments.clear();
-        System.out.println("titles size " + titles.size());
-        for(int i = 0;i < titles.size();i ++){
-            // TODO : 推荐频道
-            NewsRecycleView nrc = new NewsRecycleView();
-            Bundle bundle = new Bundle();
-            System.out.println(this.words);
-            bundle.putString("words", this.words);
-            bundle.putString("category", titles.get(i));
-            nrc.setArguments(bundle);
-            fragments.add(nrc);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case ACTIVITY_TYPE_CHANNEL_MANAGER:
+                Toast.makeText(this, "onActivityResult", Toast.LENGTH_SHORT).show();
+                updateNewsTabs();
         }
-        myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragments, titles);
-        viewPager.setAdapter(myPagerAdapter);
     }
 
     // below : code come with template

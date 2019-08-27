@@ -1,6 +1,9 @@
 package com.example.newsapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -21,7 +24,6 @@ public class NewsChannelActivity extends BaseActivity {
     private MyNewsChannelAdapter myNewsChannelAdapter;
     private NewsChannelDao dao = new NewsChannelDao();
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +32,27 @@ public class NewsChannelActivity extends BaseActivity {
         initData();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
+            default:
+        }
+        return true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        onSaveData();
+        this.setResult(RESULT_OK, new Intent());
+    }
+
     public void initView(){
         //initToolBar((Toolbar)findViewById(R.id.toolbar), true, getString(R.string.channel_manager));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         recyclerView = findViewById(R.id.news_channel_rcv);
     }
 
@@ -55,6 +76,20 @@ public class NewsChannelActivity extends BaseActivity {
 
         myNewsChannelAdapter = new MyNewsChannelAdapter(this, itemTouchHelper, enableItems, disableItems);
         recyclerView.setAdapter(myNewsChannelAdapter);
+    }
+
+    public void onSaveData(){
+        List<NewsChannelBean> enableItems = myNewsChannelAdapter.getEnableItems();
+        List<NewsChannelBean> disableItems = myNewsChannelAdapter.getDisableItems();
+        dao.removeAll();
+        for (int i = 0; i < enableItems.size(); i++) {
+            NewsChannelBean bean = enableItems.get(i);
+            dao.add(bean.getChannelId(), bean.getChannelName(), Constant.NEWS_CHANNEL_ENABLE, i);
+        }
+        for (int i = 0; i < disableItems.size(); i++) {
+            NewsChannelBean bean = disableItems.get(i);
+            dao.add(bean.getChannelId(), bean.getChannelName(), Constant.NEWS_CHANNEL_DISABLE, i);
+        }
     }
 }
 

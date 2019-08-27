@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.newsapp.Interfaces.OnMyChannelItemMoveListener;
+import com.example.newsapp.R;
 
 public class ItemDragHelperCallback extends ItemTouchHelper.Callback {
     @Override
@@ -22,7 +23,7 @@ public class ItemDragHelperCallback extends ItemTouchHelper.Callback {
 //        if(recyclerView.getAdapter() instanceof OnMyChannelItemMoveListener){
 //        }
         OnMyChannelItemMoveListener onMyChannelItemMoveListener = (OnMyChannelItemMoveListener)recyclerView.getAdapter();
-        onMyChannelItemMoveListener.onItemMvoe(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+        onMyChannelItemMoveListener.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
     }
 
@@ -40,4 +41,6 @@ public class ItemDragHelperCallback extends ItemTouchHelper.Callback {
     public boolean isItemViewSwipeEnabled() {
         return false;
     }
+
+    // TODO: add drag color blacker
 }

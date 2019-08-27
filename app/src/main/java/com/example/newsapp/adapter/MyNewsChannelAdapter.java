@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -40,15 +39,15 @@ public class MyNewsChannelAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private LayoutInflater layoutInflater;
     private ItemTouchHelper itemTouchHelper;
-    private List<NewsChannelBean> enableList, disableList;
+    private List<NewsChannelBean> enableItems, disableItems;
     private OnMyChannelItemClickListener onMyChannelItemClickListener;
     private Handler delayHandler = new Handler();
 
-    public MyNewsChannelAdapter(Context context, ItemTouchHelper helper, List<NewsChannelBean> enableList, List<NewsChannelBean> disableList){
+    public MyNewsChannelAdapter(Context context, ItemTouchHelper helper, List<NewsChannelBean> enableItems, List<NewsChannelBean> disableItems){
         this.layoutInflater =LayoutInflater.from(context);
         this.itemTouchHelper =helper;
-        this.enableList = enableList;
-        this.disableList = disableList;
+        this.enableItems = enableItems;
+        this.disableItems = disableItems;
     }
 
     @NonNull
@@ -71,15 +70,15 @@ public class MyNewsChannelAdapter extends RecyclerView.Adapter<RecyclerView.View
                         RecyclerView recyclerView = (RecyclerView) parent;
                         RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
                         View currentView = manager.findViewByPosition(position);
-                        View targetView = manager.findViewByPosition(enableList.size() - 1 + COUNT_PRE_ENABLE_HEADER);
+                        View targetView = manager.findViewByPosition(enableItems.size() - 1 + COUNT_PRE_ENABLE_HEADER);
                         if (recyclerView.indexOfChild(targetView) >= 0) {
                             int targetX, targetY;
 
                             int spanCount = ((GridLayoutManager) manager).getSpanCount();
 
                             // 移动后 高度将变化 (我的频道Grid 最后一个item在新的一行第一个)
-                            if ((enableList.size() - COUNT_PRE_ENABLE_HEADER) % spanCount == 0) {
-                                View preTargetView = recyclerView.getLayoutManager().findViewByPosition(enableList.size() + COUNT_PRE_DISABLE_HEADER - 1);
+                            if ((enableItems.size() - COUNT_PRE_ENABLE_HEADER) % spanCount == 0) {
+                                View preTargetView = recyclerView.getLayoutManager().findViewByPosition(enableItems.size() + COUNT_PRE_DISABLE_HEADER - 1);
                                 targetX = preTargetView.getLeft();
                                 targetY = preTargetView.getTop();
                             } else {
@@ -119,13 +118,13 @@ public class MyNewsChannelAdapter extends RecyclerView.Adapter<RecyclerView.View
                         RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
                         View currentView = manager.findViewByPosition(position);
                         // 目标位置的前一个item  即当前EnableChannel的最后一个
-                        View preTargetView = manager.findViewByPosition(enableList.size() - 1 + 1);
+                        View preTargetView = manager.findViewByPosition(enableItems.size() - 1 + 1);
 
                         // 如果targetView不在屏幕内,则为-1  此时不需要添加动画,因为此时notifyItemMoved自带一个向目标移动的动画  如果在屏幕内,则添加一个位移动画
                         if (recyclerView.indexOfChild(preTargetView) >= 0) {
                             int targetX = preTargetView.getLeft();
                             int targetY = preTargetView.getTop();
-                            int targetPosition = enableList.size() - 1 + COUNT_PRE_DISABLE_HEADER;
+                            int targetPosition = enableItems.size() - 1 + COUNT_PRE_DISABLE_HEADER;
                             GridLayoutManager gridLayoutManager = (GridLayoutManager) manager;
                             int spanCount = gridLayoutManager.getSpanCount();
 
@@ -139,7 +138,7 @@ public class MyNewsChannelAdapter extends RecyclerView.Adapter<RecyclerView.View
                                 // 最后一个item可见
                                 if (gridLayoutManager.findLastVisibleItemPosition() == getItemCount() - 1) {
                                     // 最后的item在最后一行第一个位置
-                                    if ((getItemCount() - 1 - enableList.size() - COUNT_PRE_DISABLE_HEADER) % spanCount == 0) {
+                                    if ((getItemCount() - 1 - enableItems.size() - COUNT_PRE_DISABLE_HEADER) % spanCount == 0) {
                                         // RecyclerView实际高度 > 屏幕高度 && RecyclerView实际高度 < 屏幕高度 + item.height
                                         int firstVisiblePostion = gridLayoutManager.findFirstVisibleItemPosition();
                                         if (firstVisiblePostion == 0) {
@@ -164,7 +163,7 @@ public class MyNewsChannelAdapter extends RecyclerView.Adapter<RecyclerView.View
                             // 则 需要延迟250秒 notifyItemMove , 这是因为这种情况 , 并不触发ItemAnimator , 会直接刷新界面
                             // 导致我们的位移动画刚开始,就已经notify完毕,引起不同步问题
                             if (position == gridLayoutManager.findLastVisibleItemPosition()
-                                    && (position - enableList.size() - COUNT_PRE_DISABLE_HEADER) % spanCount != 0
+                                    && (position - enableItems.size() - COUNT_PRE_DISABLE_HEADER) % spanCount != 0
                                     && (targetPosition - COUNT_PRE_ENABLE_HEADER) % spanCount != 0) {
                                 moveDisToEnWithDelay(disableItemHolder);
                             } else {
@@ -251,38 +250,38 @@ public class MyNewsChannelAdapter extends RecyclerView.Adapter<RecyclerView.View
         int position = enableItemHolder.getAdapterPosition();
 
         int startPosition = position - COUNT_PRE_ENABLE_HEADER;
-        if (startPosition > enableList.size() - 1) {
+        if (startPosition > enableItems.size() - 1) {
             return;
         }
-        NewsChannelBean item = enableList.get(startPosition);
-        enableList.remove(startPosition);
-        disableList.add(0, item);
+        NewsChannelBean item = enableItems.get(startPosition);
+        enableItems.remove(startPosition);
+        disableItems.add(0, item);
 
-        notifyItemMoved(position, enableList.size() + COUNT_PRE_DISABLE_HEADER);
+        notifyItemMoved(position, enableItems.size() + COUNT_PRE_DISABLE_HEADER);
     }
     private void moveDisToEn(DisableItemHolder disableItemHolder) {
         int position = processItemRemoveAdd(disableItemHolder);
         if (position == -1) {
             return;
         }
-        notifyItemMoved(position, enableList.size() - 1 + COUNT_PRE_ENABLE_HEADER);
+        notifyItemMoved(position, enableItems.size() - 1 + COUNT_PRE_ENABLE_HEADER);
     }
     private void moveDisToEnWithDelay(DisableItemHolder disableItemHolder) {
         final int position = processItemRemoveAdd(disableItemHolder);
         if (position == -1) {
             return;
         }
-        delayHandler.postDelayed(() -> notifyItemMoved(position, enableList.size() - 1 + COUNT_PRE_ENABLE_HEADER), ANIM_TIME);
+        delayHandler.postDelayed(() -> notifyItemMoved(position, enableItems.size() - 1 + COUNT_PRE_ENABLE_HEADER), ANIM_TIME);
     }
     private int processItemRemoveAdd(DisableItemHolder disableItemHolder) {
         int position = disableItemHolder.getAdapterPosition();
-        int startPosition = position - enableList.size() - COUNT_PRE_DISABLE_HEADER;
-        if (startPosition > disableList.size() - 1) {
+        int startPosition = position - enableItems.size() - COUNT_PRE_DISABLE_HEADER;
+        if (startPosition > disableItems.size() - 1) {
             return -1;
         }
-        NewsChannelBean item = disableList.get(startPosition);
-        disableList.remove(startPosition);
-        enableList.add(item);
+        NewsChannelBean item = disableItems.get(startPosition);
+        disableItems.remove(startPosition);
+        enableItems.add(item);
         return position;
     }
 
@@ -290,24 +289,36 @@ public class MyNewsChannelAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof EnableItemHolder){
             EnableItemHolder enableItemHolder = (EnableItemHolder)holder;
-            enableItemHolder.textView.setText(enableList.get(position - COUNT_PRE_ENABLE_HEADER).getChannelName());
+            enableItemHolder.textView.setText(enableItems.get(position - COUNT_PRE_ENABLE_HEADER).getChannelName());
         }
         if(holder instanceof DisableItemHolder){
             DisableItemHolder disableItemHolder = (DisableItemHolder)holder;
-            disableItemHolder.textView.setText(disableList.get(position - enableList.size() - COUNT_PRE_DISABLE_HEADER).getChannelName());
+            disableItemHolder.textView.setText(disableItems.get(position - enableItems.size() - COUNT_PRE_DISABLE_HEADER).getChannelName());
         }
     }
 
     @Override
     public int getItemCount() {
-        return enableList.size() + disableList.size() + COUNT_PRE_DISABLE_HEADER;
+        return enableItems.size() + disableItems.size() + COUNT_PRE_DISABLE_HEADER;
     }
 
     @Override
-    public void onItemMvoe(int fromPosition, int toPosition) {
-        NewsChannelBean item = enableList.get(fromPosition - COUNT_PRE_ENABLE_HEADER);
-        enableList.remove(fromPosition - COUNT_PRE_ENABLE_HEADER);
-        enableList.add(toPosition - COUNT_PRE_ENABLE_HEADER, item);
+    public int getItemViewType(int position) {
+        if (position == 0) {    // 我的频道 标题部分
+            return TYPE_ENABLE_CHANNEL_HEADER;
+        } else if (position == enableItems.size() + 1) {    // 其他频道 标题部分
+            return TYPE_DISABLE_CHANNEL_HEADER;
+        } else if (position > 0 && position < enableItems.size() + 1) {
+            return TYPE_ENABLE;
+        } else {
+            return TYPE_DISABLE;
+        }
+    }
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        NewsChannelBean item = enableItems.get(fromPosition - COUNT_PRE_ENABLE_HEADER);
+        enableItems.remove(fromPosition - COUNT_PRE_ENABLE_HEADER);
+        enableItems.add(toPosition - COUNT_PRE_ENABLE_HEADER, item);
         notifyItemMoved(fromPosition, toPosition);
     }
 
@@ -331,16 +342,10 @@ public class MyNewsChannelAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        if (position == 0) {    // 我的频道 标题部分
-            return TYPE_ENABLE_CHANNEL_HEADER;
-        } else if (position == enableList.size() + 1) {    // 其他频道 标题部分
-            return TYPE_DISABLE_CHANNEL_HEADER;
-        } else if (position > 0 && position < enableList.size() + 1) {
-            return TYPE_ENABLE;
-        } else {
-            return TYPE_DISABLE;
-        }
+    public List<NewsChannelBean> getEnableItems(){
+        return enableItems;
+    }
+    public List<NewsChannelBean> getDisableItems(){
+        return disableItems;
     }
 }

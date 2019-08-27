@@ -6,16 +6,19 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+import com.example.newsapp.bean.NewsChannelBean;
+import com.example.newsapp.database.NewsChannelDao;
+
 import java.util.List;
 
 public class MyPagerAdapter extends FragmentStatePagerAdapter {
     private List<Fragment> fragments;
-    private List<String> titles;
+    private List<NewsChannelBean> channelList;
 
-    public MyPagerAdapter(FragmentManager fragmentManager, List<Fragment> fragments, List<String> titles){
+    public MyPagerAdapter(FragmentManager fragmentManager, List<Fragment> fragments, List<NewsChannelBean> channelList){
         super(fragmentManager);
         this.fragments = fragments;
-        this.titles = titles;
+        this.channelList = channelList;
     }
 
     @Override
@@ -31,6 +34,6 @@ public class MyPagerAdapter extends FragmentStatePagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return titles.get(position);
+        return channelList.get(position).getChannelName();
     }
 }
