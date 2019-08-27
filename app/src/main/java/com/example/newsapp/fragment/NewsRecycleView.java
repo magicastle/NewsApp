@@ -104,7 +104,6 @@ public class NewsRecycleView extends Fragment {
                 //progressDialog.dismiss();
                 newsList.addAll(response.body().getData());
                 mAdapter.notifyDataSetChanged();
-                initListener();
             }
 
             @Override
@@ -112,21 +111,6 @@ public class NewsRecycleView extends Fragment {
                 // progressDialog.dismiss();
                 // TODO: load error activity
                 Toast.makeText(getActivity(), "Load error.... maybe retry....", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void initListener(){
-        mAdapter.setOnItemClickListener(new MyNewsListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                // prepare the data pasted from MainActivity to NewsDetail page
-                Intent intent = new Intent(getActivity(), NewsDetailActivity.class);
-                SingleNews newsDetail = newsList.get(position);
-                intent.putExtra("newsDetail", newsDetail);
-
-                // start newsDetail page
-                startActivity(intent);
             }
         });
     }

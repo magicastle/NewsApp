@@ -1,5 +1,6 @@
 package com.example.newsapp;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity
     private MyPagerAdapter myPagerAdapter;
 
     public static Context globalContext;
+    public static Activity mainActivity;
     private NewsChannelDao dao;
 
 
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         globalContext = getApplicationContext();
+        mainActivity = this;
         // initData 需要在 initView 之前完成，这样才知道要有多少个tab(fragment)需要建立
         initData();
         initView();
