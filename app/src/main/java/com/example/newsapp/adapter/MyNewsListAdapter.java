@@ -18,7 +18,7 @@ import com.example.newsapp.util.Constant;
 
 import java.util.List;
 
-public class MyNewsListAdapter extends RecyclerView.Adapter<MyNewsListAdapter.MyViewHolder> {
+public class MyNewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<SingleNews> newsList;
     private Context context;
 
@@ -31,7 +31,6 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<MyNewsListAdapter.My
         TextView title;
         TextView contentAbstract;
         TextView publishInfo;
-//        OnItemClickListener onItemClickListener;
 
         public MyViewHolder(View itemView){
             super(itemView);
@@ -60,15 +59,16 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<MyNewsListAdapter.My
 
     @NonNull
     @Override
-    public MyNewsListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context)
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view;
+        view = LayoutInflater.from(context)
                 .inflate(R.layout.item_news_list, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holders, int position) {
-        final MyViewHolder holder = holders;
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holders, int position) {
+        final MyViewHolder holder = (MyViewHolder) holders;
         SingleNews news = newsList.get(position);
         holder.title.setText(news.getTitle());
         holder.contentAbstract.setText(news.getAbstract());
