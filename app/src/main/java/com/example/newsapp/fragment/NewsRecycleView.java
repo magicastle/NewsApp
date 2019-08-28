@@ -3,6 +3,7 @@ package com.example.newsapp.fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.ajguan.library.EasyRefreshLayout;
 import com.example.newsapp.NewsDetailActivity;
 import com.example.newsapp.R;
 import com.example.newsapp.adapter.MyNewsListAdapter;
@@ -24,6 +26,7 @@ import com.example.newsapp.network.GetDataService;
 import com.example.newsapp.network.RetrofitClientInstance;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -38,7 +41,8 @@ public class NewsRecycleView extends Fragment {
     private String endDate   = "2021-08-03 18:42:20";
     private String words = "";
     private String category = "";
-    private String page="1";
+    //private String page="1";
+    private Integer page = 1;
 
     private ProgressDialog progressDialog;
     private NewsData newsData;
@@ -47,16 +51,20 @@ public class NewsRecycleView extends Fragment {
     private MyNewsListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    private SwipeRefreshLayout swipeRefreshLayout;
+    //private SwipeRefreshLayout swipeRefreshLayout;
+    private EasyRefreshLayout easyRefreshLayout;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_news_list, container, false);
+
+        // init search options
         Bundle bundle = getArguments();
         words = bundle.getString("words");
         category = bundle.getString("category");
+        page = 1;
         initView();
         request();
         System.out.println("new build fragment news list: " + words + " " + category);
@@ -70,15 +78,34 @@ public class NewsRecycleView extends Fragment {
         newsList = new ArrayList<SingleNews>();
         mAdapter = new MyNewsListAdapter(newsList, getActivity());
         recyclerView.setAdapter(mAdapter);
-        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
-        //swipeRefreshLayout.setColorSchemeColors();
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+        easyRefreshLayout = view.findViewById(R.id.easy_refresh_layout);
+        easyRefreshLayout.addEasyEvent(new EasyRefreshLayout.EasyEvent() {
             @Override
-            public void onRefresh() {
-                newsList.clear();
-                request();
-                Toast.makeText(getActivity(), "refreshed", Toast.LENGTH_SHORT).show();
-                swipeRefreshLayout.setRefreshing(false);
+            public void onLoadMore() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        page ++;
+                        request();
+                        easyRefreshLayout.loadMoreComplete();
+                        Toast.makeText(getActivity(), "Yeah, load more !!!!", Toast.LENGTH_SHORT).show();
+                    }
+                }, 1000);
+            }
+
+            @Override
+            public void onRefreshing() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        newsList.clear();
+                        page = 1;
+                        request();
+                        easyRefreshLayout.refreshComplete();
+                        Toast.makeText(getActivity(), "Yeah, refreshed !!!!", Toast.LENGTH_SHORT).show();
+                    }
+                }, 1000);
             }
         });
     }
@@ -96,7 +123,7 @@ public class NewsRecycleView extends Fragment {
                 this.endDate,
                 this.words,
                 this.category,
-                this.page
+                this.page.toString()
         );
         call.enqueue(new Callback<NewsData>() {
             @Override

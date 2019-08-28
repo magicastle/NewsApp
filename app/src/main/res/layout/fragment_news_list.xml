@@ -7,8 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout"
+    <com.ajguan.library.EasyRefreshLayout
+        android:id="@+id/easy_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -21,16 +21,27 @@
             android:scrollbars="vertical"
             app:layoutManager="LinearLayoutManager">
 
-
         </androidx.recyclerview.widget.RecyclerView>
+    </com.ajguan.library.EasyRefreshLayout>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    <!--
-    <TextView
-        android:text="china !!!"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-    -->
+    <!--<androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->
+        <!--android:id="@+id/swipe_refresh_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!--<androidx.recyclerview.widget.RecyclerView-->
+            <!--android:id="@+id/recyclerview"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:fadeScrollbars="true"-->
+            <!--android:scrollbarFadeDuration="1"-->
+            <!--android:scrollbars="vertical"-->
+            <!--app:layoutManager="LinearLayoutManager">-->
+
+
+        <!--</androidx.recyclerview.widget.RecyclerView>-->
+
+    <!--</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
 
 </LinearLayout>
 

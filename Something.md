@@ -33,7 +33,7 @@
 - [x] RecycleView: ListView 升级版
 - [x] CardView:  beautify
 - [x] SwipeRefreshLayout: 下拉刷新
-- [ ] SwipeRefreshLayout: 上拉加载更多
+- [x] easyRefreshLayout: 上拉加载更多
 - [x] Click jump to news detail page
 
 
@@ -67,6 +67,21 @@
 ## 遇到的(大)坑/问题 + 解决
 
 * <https://blog.csdn.net/qq_32623363/article/details/54895817> 神他么巨坑
+
+
+
+## 下拉刷新，上拉加载更多的实现方式（选择了方式3）
+
+1. SwipeRreshLayout + Recyclerview: 
+   1. SwipeRreshLayout 实现下拉刷新
+   2. RecyclerView 通过添加底部 FootView 方式，实现上拉加载更多
+2. [BaseRecyclerViewAdapterHelper](http://www.recyclerview.org/)
+   1. 内部集成了许多功能，感觉很方便实现
+   2. 但是单纯的通过Adapter实现下拉刷新有些困难（奇怪），所以一般还是通过SwipeFreshLayout配合实现
+3. [BaseRecyclerViewAdapterHelper](http://www.recyclerview.org/) + [EasyRefreshLayout](<https://github.com/anzaizai/EasyRefreshLayout>)
+   1. 配合使用，不用Base实现上拉下拉，用EasyRefreshLayout实现
+
+
 
 
 
