@@ -31,6 +31,9 @@ public class SingleNews implements Serializable {
     @SerializedName("category")
     private String category;
 
+    @SerializedName("url")
+    private String url;
+
     @SerializedName("persons")
     private ArrayList<Persons> persons;
     @SerializedName("locations")
@@ -116,6 +119,7 @@ public class SingleNews implements Serializable {
         System.out.println(Arrays.asList(images));
         return images;
     }
+    public  String getUrl(){return this.url;}
 
 }
 

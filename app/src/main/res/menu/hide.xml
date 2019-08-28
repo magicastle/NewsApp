@@ -2,11 +2,20 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/switchbutton"
+        android:title=""
+        app:showAsAction="always"
+        app:actionLayout="@layout/menu_relaty"
+        />
+
+    <item
         android:id="@+id/share"
         android:title="share" />
     <item
         android:id="@+id/mark"
-        android:title="mark"/>
+        android:title="mark"
+
+    />
     <item
         android:id="@+id/download"
         android:title="download"/>
