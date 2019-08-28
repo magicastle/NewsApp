@@ -21,6 +21,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(NewsChannelTable.CREATE_TABLE);
+        db.execSQL(NewsCollectionsTable.CREATE_TABLE);
     }
 
     // 升级数据库时需要用到，然而我们现在并不需要..emm..

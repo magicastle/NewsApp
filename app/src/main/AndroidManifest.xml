@@ -37,6 +37,9 @@
         <activity android:name=".NewsChannelActivity"
             android:label="Channel Manager"
             />
+        <activity android:name=".CollectionActivity"
+            android:label="Collections"
+            />
     </application>
 
 </manifest>

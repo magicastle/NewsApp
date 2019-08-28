@@ -79,12 +79,4 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public int getItemCount() {
         return newsList.size();
     }
-
-//    @Override
-//    public int getItemViewType(int position) {
-//        if(position + 1 == getItemCount()){
-//            return Constant.ITEM_TYPE_FOOT_VIEW;
-//        }
-//        return Constant.ITEM_TYPE_SINGLE_NEWS;
-//    }
 }
