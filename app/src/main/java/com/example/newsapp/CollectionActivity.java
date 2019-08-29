@@ -55,6 +55,7 @@ public class CollectionActivity extends BaseActivity{
                     null,
                     null
             ));
+            System.out.println(collectionsList.get(i).getImage());
         }
     }
     public void initView(){

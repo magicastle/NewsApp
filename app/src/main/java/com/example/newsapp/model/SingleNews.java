@@ -116,11 +116,11 @@ public class SingleNews implements Serializable {
     public String[] getImage()
     {
         //System.out.println("image is "+image);
-        image=image.substring(1,image.length()-1);
+        String tmpImage = image.substring(1,image.length()-1);
         //System.out.println("image iss "+image);
         String[] images;
-        if(image.length()>0)
-            images=image.split(",");
+        if(tmpImage.length()>0)
+            images=tmpImage.split(",");
         else images=new String[0];
         System.out.println("images.length="+images.length);
         System.out.println(Arrays.asList(images));

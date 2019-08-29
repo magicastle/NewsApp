@@ -112,7 +112,8 @@ public class NewsDetailActivity extends AppCompatActivity {
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if(b)
                     {
-                        collectionsDao.add(news.getNewsID(),
+                        collectionsDao.add(
+                                news.getNewsID(),
                                 news.getImageString(),
                                 news.getPublishTime(),
                                 news.getPublisher(),
