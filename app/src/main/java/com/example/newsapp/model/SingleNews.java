@@ -51,14 +51,15 @@ public class SingleNews implements Serializable {
     private ArrayList<ScoreAndWord> who;
 
 
-    SingleNews(
+    public SingleNews(
+            String image,
             String publishTime,
             String publisher,
-            String language,
-            String image,
-            String video,
             String title,
             String content,
+
+            String language,
+            String video,
             String newsID,
             String category,
 
