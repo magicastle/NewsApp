@@ -31,7 +31,7 @@ public class NewsChannelTable {
      * 创建表
      */
     public static final String CREATE_TABLE = "create table if not exists " + TABLENAME + "(" +
-            ID + " text primary key, " +
+            ID + " text primary key unique, " +
             NAME + " text, " +
             IS_ENABLE + " text default '1', " +
             POSITION + " text) ";

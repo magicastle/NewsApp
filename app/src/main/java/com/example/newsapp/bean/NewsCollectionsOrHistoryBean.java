@@ -1,15 +1,14 @@
 package com.example.newsapp.bean;
 
-import androidx.annotation.NonNull;
-
-import com.example.newsapp.database.NewsCollectionsTable;
-
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class NewsCollectionsBean {
+/*
+    collection news or history news(readed)
+ */
+public class NewsCollectionsOrHistoryBean {
 
+    private String newsID;
     private String image;
     private String publishTime;
     private String publisher;
@@ -17,6 +16,12 @@ public class NewsCollectionsBean {
     private String content;
 
 
+    public void setNewsID(String newsID){
+        this.newsID = newsID;
+    }
+    public String getNewsID(){
+        return this.newsID;
+    }
 
     public void setTitle(String title){
         this.title = title;
@@ -55,17 +60,4 @@ public class NewsCollectionsBean {
     public String getImage(){
         return this.image;
     }
-    //public String[] getImage()
-    //{
-    //    //System.out.println("image is "+image);
-    //    image=image.substring(1,image.length()-1);
-    //    //System.out.println("image iss "+image);
-    //    String[] images;
-    //    if(image.length()>0)
-    //        images=image.split(",");
-    //    else images=new String[0];
-    //    System.out.println("images.length="+images.length);
-    //    System.out.println(Arrays.asList(images));
-    //    return images;
-    //}
 }

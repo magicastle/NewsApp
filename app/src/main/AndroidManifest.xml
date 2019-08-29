@@ -40,6 +40,9 @@
         <activity android:name=".CollectionActivity"
             android:label="Collections"
             />
+        <activity android:name=".HistoryActivity"
+            android:label="History"
+            />
     </application>
 
 </manifest>

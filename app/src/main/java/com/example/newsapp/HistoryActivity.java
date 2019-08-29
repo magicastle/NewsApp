@@ -9,15 +9,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.newsapp.adapter.MyNewsListAdapter;
 import com.example.newsapp.bean.NewsCollectionsOrHistoryBean;
 import com.example.newsapp.database.NewsCollectionsDao;
+import com.example.newsapp.database.NewsHistoryDao;
 import com.example.newsapp.model.SingleNews;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CollectionActivity extends BaseActivity{
-    private List<NewsCollectionsOrHistoryBean> collectionsList;
+
+public class HistoryActivity extends BaseActivity{
+    private List<NewsCollectionsOrHistoryBean> historyList;
     private List<SingleNews> newsList;
-    private NewsCollectionsDao dao = new NewsCollectionsDao();
+    private NewsHistoryDao dao = new NewsHistoryDao();
     private RecyclerView recyclerView;
     private MyNewsListAdapter adapter;
 
@@ -25,7 +27,7 @@ public class CollectionActivity extends BaseActivity{
     @Override
     public void onCreate(Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_collections);
+        setContentView(R.layout.activity_history);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initData();
@@ -33,19 +35,19 @@ public class CollectionActivity extends BaseActivity{
     }
 
     public void initData(){
-        collectionsList = dao.query();
-        System.out.println("collections List items num : " + collectionsList.size());
+        historyList = dao.query();
+        System.out.println("history List items num : " + historyList.size());
         newsList = new ArrayList<>();
-        for(int i = 0;i < collectionsList.size();i ++){
+        for(int i = 0;i < historyList.size();i ++){
             newsList.add(new SingleNews(
-                    collectionsList.get(i).getImage(),
-                    collectionsList.get(i).getPublishTime(),
-                    collectionsList.get(i).getPublisher(),
-                    collectionsList.get(i).getTitle(),
-                    collectionsList.get(i).getContent(),
+                    historyList.get(i).getImage(),
+                    historyList.get(i).getPublishTime(),
+                    historyList.get(i).getPublisher(),
+                    historyList.get(i).getTitle(),
+                    historyList.get(i).getContent(),
                     null,
                     null,
-                    collectionsList.get(i).getNewsID(),
+                    historyList.get(i).getNewsID(),
                     null,
                     null,
                     null,
@@ -59,7 +61,7 @@ public class CollectionActivity extends BaseActivity{
     }
     public void initView(){
         adapter = new MyNewsListAdapter(newsList, this);
-        recyclerView = findViewById(R.id.collections_rcv);
+        recyclerView = findViewById(R.id.history_rcv);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
