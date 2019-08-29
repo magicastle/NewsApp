@@ -1,7 +1,6 @@
 package com.example.newsapp.fragment;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -14,10 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.ajguan.library.EasyRefreshLayout;
-import com.example.newsapp.NewsDetailActivity;
 import com.example.newsapp.R;
 import com.example.newsapp.adapter.MyNewsListAdapter;
 import com.example.newsapp.model.NewsData;
@@ -26,7 +23,6 @@ import com.example.newsapp.network.GetDataService;
 import com.example.newsapp.network.RetrofitClientInstance;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -74,7 +70,7 @@ public class NewsRecycleView extends Fragment {
     public void initView(){
         recyclerView = view.findViewById(R.id.recyclerview);
         layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
+        //recyclerView.setLayoutManager(layoutManager);
         newsList = new ArrayList<SingleNews>();
         mAdapter = new MyNewsListAdapter(newsList, getActivity());
         recyclerView.setAdapter(mAdapter);

@@ -36,7 +36,7 @@ public class NewsChannelDao {
         values.put(NewsChannelTable.NAME, channelName);
         values.put(NewsChannelTable.IS_ENABLE, isEnable);
         values.put(NewsChannelTable.POSITION, position);
-        long result = db.insert(NewsChannelTable.TABLENAME, null, values);
+        long result = db.insertWithOnConflict(NewsChannelTable.TABLENAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         return result != -1;
     }
 

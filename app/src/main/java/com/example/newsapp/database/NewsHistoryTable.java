@@ -1,12 +1,10 @@
 package com.example.newsapp.database;
 
-import com.example.newsapp.model.SingleNews;
-
-public class NewsCollectionsTable {
+public class NewsHistoryTable {
     /**
      * 新闻收藏表
      */
-    public static final String TABLENAME = "NewsCollectionsTable";
+    public static final String TABLENAME = "NewsHistoryTable";
 
     /**
      * 字段部分
