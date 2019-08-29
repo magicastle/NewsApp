@@ -92,6 +92,9 @@ public class SingleNews implements Serializable {
         this.who = who;
     }
 
+    public String getNewsID(){
+        return this.newsID;
+    }
     public String getTitle() {
         return this.title;
     }
@@ -107,6 +110,9 @@ public class SingleNews implements Serializable {
     }
     public String getPublisher(){return this.publisher;}
     public String getPublishTime(){return this.publishTime;}
+    public String getImageString(){
+        return this.image;
+    }
     public String[] getImage()
     {
         //System.out.println("image is "+image);

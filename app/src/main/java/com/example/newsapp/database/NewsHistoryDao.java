@@ -31,6 +31,24 @@ public class NewsHistoryDao {
         return result != -1;
     }
 
+    public List<NewsCollectionsOrHistoryBean> query(String ID){
+        Cursor cursor = db.query(NewsHistoryTable.TABLENAME, null, NewsCollectionsTable.ID + "=?", new String[]{ID}, null, null, null, null);
+        List<NewsCollectionsOrHistoryBean> list = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            NewsCollectionsOrHistoryBean bean = new NewsCollectionsOrHistoryBean();
+
+            bean.setNewsID(cursor.getString(NewsHistoryTable.ID_ID));
+            bean.setImage(cursor.getString(NewsHistoryTable.ID_IMAGE));
+            bean.setPublishTime(cursor.getString(NewsHistoryTable.ID_PUBLISHTIME));
+            bean.setPublisher(cursor.getString(NewsHistoryTable.ID_PUBLISHER));
+            bean.setTitle(cursor.getString(NewsHistoryTable.ID_TITLE));
+            bean.setContent(cursor.getString(NewsHistoryTable.ID_CONSTANT));
+
+            list.add(bean);
+        }
+        cursor.close();
+        return list;
+    }
     public List<NewsCollectionsOrHistoryBean> query() {
         Cursor cursor = db.query(NewsHistoryTable.TABLENAME, null, null, null, null, null, null);
         List<NewsCollectionsOrHistoryBean> list = new ArrayList<>();

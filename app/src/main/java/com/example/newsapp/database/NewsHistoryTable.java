@@ -31,9 +31,9 @@ public class NewsHistoryTable {
      */
     public static final String CREATE_TABLE = "create table if not exists " + TABLENAME + "(" +
             ID + " text primary key unique, " +
-            IMAGE + "text," +
-            PUBLISHTIME + "text," +
-            PUBLISHER + "text," +
-            TITLE + "text," +
-            CONTENT + "text)";
+            IMAGE + " text, " +
+            PUBLISHTIME + " text, " +
+            PUBLISHER + " text, " +
+            TITLE + " text, " +
+            CONTENT + " text) ";
 }
