@@ -107,20 +107,23 @@ public class NewsDetailActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.hide,menu);
         switchbutton=(Switch) menu.findItem(R.id.switchbutton).getActionView().findViewById(R.id.switchForActionBar);
-        switchbutton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b)
-                {
+        if(switchbutton != null){
 
+            switchbutton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if(b)
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
                 }
-                else
-                {
+            });
 
-                }
-            }
-        });
-
+        }
         return true;
     }
 
