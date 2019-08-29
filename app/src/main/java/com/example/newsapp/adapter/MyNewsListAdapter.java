@@ -51,7 +51,7 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     // MainActivity.mainActivity 为定义的static常量，不然的话从Mainactivity -> NewsRecycleView(Fragment) -> Adapter -> here 一层层传实在太烦了
                     Intent intent = new Intent(MainActivity.mainActivity, NewsDetailActivity.class);
                     SingleNews news= newsList.get(getAdapterPosition());
-                    intent.putExtra("newsDetail", news);
+                    intent.putExtra("news", news);
 
                     // 为了标识点击事件
                     // SelectedItem.setSelectedNavItem(getAdapterPosition());

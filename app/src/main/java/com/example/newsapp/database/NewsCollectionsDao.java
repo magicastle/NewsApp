@@ -31,6 +31,11 @@ public class NewsCollectionsDao {
         return result != -1;
     }
 
+    public boolean delete(String newsID){
+        int result = db.delete(NewsCollectionsTable.TABLENAME, NewsCollectionsTable.ID + "=?", new String[]{newsID});
+        return result != -1;
+    }
+
     public List<NewsCollectionsOrHistoryBean> query(String ID){
         Cursor cursor = db.query(NewsCollectionsTable.TABLENAME, null, NewsCollectionsTable.ID + "=?", new String[]{ID}, null, null, null, null);
         List<NewsCollectionsOrHistoryBean> list = new ArrayList<>();

@@ -1,71 +1,64 @@
 package com.example.newsapp;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.provider.Contacts;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.SimpleAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.*;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.*;
 import com.bumptech.glide.request.target.Target;
+import com.example.newsapp.bean.NewsCollectionsOrHistoryBean;
+import com.example.newsapp.database.NewsCollectionsDao;
 import com.example.newsapp.model.SingleNews;
-import com.google.android.material.appbar.AppBarLayout;
 
-import java.util.ArrayList;
 import java.util.List;
-
 
 public class NewsDetailActivity extends AppCompatActivity {
 
-    private SingleNews newsDetail;
+    private SingleNews news;
     private TextView contentTextView;
     private TextView titleTextView;
 
     private ImageView imageView;
-    //private Toolbar toolbar;
     private Switch switchbutton;
+    private NewsCollectionsDao collectionsDao = new NewsCollectionsDao();
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
-//        toolbar = findViewById(R.id.toolb);
-//        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // find component
-        newsDetail = (SingleNews) getIntent().getSerializableExtra("newsDetail");
+        news = (SingleNews) getIntent().getSerializableExtra("news");
 
+        if(news != null){
+            initView();
+        }
+    }
+
+    public void initView(){
         titleTextView = findViewById(R.id.new_detail_title_tv);
-        titleTextView.setText(newsDetail.getTitle());
+        titleTextView.setText(news.getTitle());
         contentTextView= findViewById(R.id.new_detail_content_tv);
-        contentTextView.setText(newsDetail.getContent());
-
-
-
+        contentTextView.setText(news.getContent());
         imageView=findViewById(R.id.news_image);
-        String urls[]=newsDetail.getImage();//images lists
+        String urls[]= news.getImage();//images lists
         if(urls.length>0)
         {
             System.out.println(urls[0]);
@@ -94,12 +87,10 @@ public class NewsDetailActivity extends AppCompatActivity {
                     .apply(options)
                     .listener(mRequestListener)
                     .into(imageView);
-
-
         }
-        else
+        else{
             imageView.setVisibility(View.GONE);
-
+        }
         Toast.makeText(this, "image"+urls.length , Toast.LENGTH_LONG).show();
     }
 
@@ -107,22 +98,34 @@ public class NewsDetailActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.hide,menu);
         switchbutton=(Switch) menu.findItem(R.id.switchbutton).getActionView().findViewById(R.id.switchForActionBar);
-        if(switchbutton != null){
 
+        if(news != null){
+            List<NewsCollectionsOrHistoryBean> list = collectionsDao.query(news.getNewsID());
+            if(list.size() != 0){
+                switchbutton.setChecked(true);
+            }
+        }
+
+        if(switchbutton != null){
             switchbutton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if(b)
                     {
-
+                        collectionsDao.add(news.getNewsID(),
+                                news.getImageString(),
+                                news.getPublishTime(),
+                                news.getPublisher(),
+                                news.getTitle(),
+                                news.getContent()
+                        );
                     }
                     else
                     {
-
+                        collectionsDao.delete(news.getNewsID());
                     }
                 }
             });
-
         }
         return true;
     }
@@ -135,7 +138,7 @@ public class NewsDetailActivity extends AppCompatActivity {
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
                 //shareIntent.setData(Uri.parse("myapp://dosomething"));
-                shareIntent.putExtra(Intent.EXTRA_TEXT, newsDetail.getAbstract()+"\n"+newsDetail.getUrl());
+                shareIntent.putExtra(Intent.EXTRA_TEXT, news.getAbstract()+"\n"+ news.getUrl());
                 shareIntent.setType("text/plain");
                 startActivity(Intent.createChooser(shareIntent, "send to..."));
 
@@ -154,5 +157,4 @@ public class NewsDetailActivity extends AppCompatActivity {
         }
         return true;
     }
-
 };
