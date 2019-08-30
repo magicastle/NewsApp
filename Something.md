@@ -10,19 +10,19 @@
 
 ## Done: UI
 
-### MainActivity
+#### MainActivity
 
 * Navigation drawer Activity (**Now Chosen**))
 * Tabbed Activity
 * 或者组合
 
-### NewsDetailActivity
+#### NewsDetailActivity
 
 * .......
 
 
 
-## Done : Network
+## Done: Network
 
 - [x] Retrofit : 网络请求，返回数据处理
 
@@ -38,29 +38,25 @@
 
 
 
-## TODO: Main Activity
+## Done: Main Activity
 
 - [x] Search:  words
-- [ ] Settings:
+- [x] Settings:
 
 
 
-## TODO: NewsDetail Activity
+## Done: NewsDetail Activity
 
 - [x] 由MainActivity页面向 NewsDetail 页面传递信息：选择了传递自定义对象SingleNews,要不然一项一项传入过于麻烦了， 需要 SingleNews 类 实现 Serializable接口（不需要做什么）
 - [x] Glide : 图片加载框架：用于新闻具体页面中图片(其他选择：picasso, fresco)
 - [x] 左上角返回上一级
-- [ ] 分享
-- [ ] 收藏
-- [ ] 保存本地
+- [x] 分享
+- [x] 收藏
+- [x] 保存本地
 
 
 
-## TODO: 本地存储
-
-- [ ] 每次请求得到的json文件
-- [ ] 数据库 or json格式？
-- [ ] 看过的新闻
+## Done: 本地存储
 
 
 
@@ -83,6 +79,18 @@
 
 
 
+## 关键词搜索+历史记录
+
+1. 开始使用了Android 自带的控件，美观好用但是无法进行历史记录
+2. 打算新建SearchActivity手写实现，但是感觉过于麻烦（其实自己后来查找框架的时间应该也能手写出来了）
+3. 尝试了几个SearchView框架，[floatingSearchView](<https://github.com/arimorty/floatingsearchview>) 对于实现Suggestions(History)的方式有点看不明白，又尝试了，看到过内置好数据库的[MaterialSearchView](<https://github.com/lapism/MaterialSearchView>)，但是也没用起来，最后用了[MaterialSearchBar](<https://github.com/mancj/MaterialSearchBar>), 加上自己实现的数据库
+
+
+
+## TODO：
+
+
+
 
 
 
@@ -90,20 +98,18 @@
 |          | 功能     | 子功能                               | 分   | 完成情况  | 子性能         | 分   | 完成情况  |
 | -------- | -------- | ------------------------------------ | ---- | --------- | -------------- | ---- | --------- |
 | 基础功能 | 系统支持 | 正常运行不崩溃                       | 8    | Done      | 不卡顿         | 2    | Done      |
-|          | 页面布局 | 合理正确                             | 8    |           | 美观、图片     | 2    |           |
+|          | 页面布局 | 合理正确                             | 8    | Done      | 美观、图片     | 2    | Done      |
 |          | 分类列表 | 删除添加                             | 4    | Done      | 修改动态       | 1    | Done      |
 |          | 新闻列表 | 正确显示,进入                        | 8    | Done      | 图片、视频     | 2    | Half Done |
-|          |          | 本地存储<br />离线浏览<br />页面标灰 | 8    |           | 存储大量新闻   | 2    |           |
-|          |          | 上拉更多<br />下拉刷新               | 4    | Half Done | 上拉、下拉特效 | 1    |           |
+|          |          | 本地存储<br />离线浏览<br />页面标灰 | 8    | Done      | 存储大量新闻   | 2    | Done      |
+|          |          | 上拉更多<br />下拉刷新               | 4    | Done      | 上拉、下拉特效 | 1    | Done      |
 |          |          | 显示来源、时间                       | 4    | Done      | 合理美观       | 1    |           |
-|          |          | 新闻关键词<br />历史记录             | 4    | Half Done | 合理美观       | 1    |           |
-|          | 分享     | 分享                                 | 4    |           | 合理美观       | 1    |           |
-|          |          | 收藏添加删除                         | 4    |           | 合理美观       | 1    |           |
-|          |          | 所有收藏列表                         | 4    |           | 合理美观       | 1    |           |
+|          |          | 新闻关键词搜索<br />历史记录         | 4    | Done      | 合理美观       | 1    |           |
+|          | 分享     | 分享                                 | 4    | Half Done | 合理美观       | 1    |           |
+|          |          | 收藏添加删除                         | 4    | Done      | 合理美观       | 1    |           |
+|          |          | 所有收藏列表                         | 4    | Done      | 合理美观       | 1    |           |
 |          | 推荐     | 看过新闻推荐                         | 8    |           | 推荐准确       | 2    |           |
 | 附加     | 夜间模式 |                                      |      |           |                |      |           |
-|          |          |                                      |      |           |                |      |           |
-|          |          |                                      |      |           |                |      |           |
 |          |          |                                      |      |           |                |      |           |
 |          |          |                                      |      |           |                |      |           |
 
