@@ -1,30 +1,35 @@
 package com.example.newsapp;
 
 import android.app.Activity;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.example.newsapp.adapter.MyPagerAdapter;
 import com.example.newsapp.bean.NewsChannelBean;
+import com.example.newsapp.bean.SearchHistoryBean;
 import com.example.newsapp.database.NewsChannelDao;
+import com.example.newsapp.database.SearchHistoryDao;
 import com.example.newsapp.fragment.NewsRecycleView;
 import com.example.newsapp.util.Constant;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.view.Gravity;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.core.view.GravityCompat;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -32,10 +37,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.Menu;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -45,25 +50,30 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private String words = "";
-
     private FloatingActionButton fab;
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    private final int ACTIVITY_TYPE_CHANNEL_MANAGER = 1;
-
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ImageView modifyNewsChannel;
+    private FloatingSearchView floatingSearchView;
+    private MaterialSearchBar searchBar;
+    private FloatingActionButton floatingActionButton;
+
+
+    private String words = "";
+    private final int ACTIVITY_TYPE_CHANNEL_MANAGER = 1;
+    private final int ACTIVITY_TYPE_SEACHER = 2;
+    public static Context globalContext;
+    public static Activity mainActivity;
+    private NewsChannelDao newsChannelDao;
     private List<NewsChannelBean> channelList;
     private List<Fragment> fragments;
     private MyPagerAdapter myPagerAdapter;
-
-    public static Context globalContext;
-    public static Activity mainActivity;
-    private NewsChannelDao dao;
-
+    private SearchHistoryDao searchHistoryDao;
+    private List<SearchHistoryBean> historyBeansList;
+    private List<String> historyStringList;
 
 
     @Override
@@ -78,25 +88,47 @@ public class MainActivity extends AppCompatActivity
         initView();
     }
 
-    public void initView(){
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    public void initData(){
+        // query channel data from database
+        newsChannelDao = new NewsChannelDao();
+        fragments = new ArrayList<>();
+        channelList = newsChannelDao.query(Constant.NEWS_CHANNEL_ENABLE);
+        if (channelList.size() == 0) {
+            newsChannelDao.addInitData();
+            channelList = newsChannelDao.query(Constant.NEWS_CHANNEL_ENABLE);
+        }
 
-        fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        for (NewsChannelBean bean : channelList) {
+            NewsRecycleView nrc = new NewsRecycleView();
+            Bundle bundle = new Bundle();
+            bundle.putString("words", this.words);
+            bundle.putString("category", bean.getChannelName());
+            nrc.setArguments(bundle);
+            fragments.add(nrc);
+        }
+
+        // query search history from database
+        searchHistoryDao = new SearchHistoryDao();
+        historyStringList = new ArrayList<>();
+        historyBeansList = searchHistoryDao.query();
+        for(SearchHistoryBean bean : historyBeansList){
+            historyStringList.add(bean.getSearchWord());
+            System.out.println("find " + bean.getSearchWord() + " lll");
+        }
+    }
+
+    public void initView(){
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.addDrawerListener(toggle);
+//        toggle.syncState();
+
+
+        initSearchBar();
+        //initSearchView();
 
         tabLayout = findViewById(R.id.tab_layout_news);
         viewPager = findViewById(R.id.view_pager_news);
@@ -108,36 +140,126 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        floatingActionButton = findViewById(R.id.searchButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() { @Override
+        public void onClick(View v) {
+            searchBar.enableSearch();
+        }
+        });
+
         myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragments, channelList);
         viewPager.setAdapter(myPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    public void initData(){
-        dao = new NewsChannelDao();
-        fragments = new ArrayList<>();
+    public void initSearchBar(){
+        searchBar = findViewById(R.id.searchBar);
+        searchBar.setHint("explore...");
+        searchBar.setSpeechMode(true);
+        //enable searchbar callbacks
+        searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+            @Override
+            public void onSearchStateChanged(boolean enabled) {
+                if(enabled){
+                }
+                else{
+                }
+            }
 
-        // TODO: categoryName - fragment hashmap
-        channelList = dao.query(Constant.NEWS_CHANNEL_ENABLE);
-        if (channelList.size() == 0) {
-            dao.addInitData();
-            channelList = dao.query(Constant.NEWS_CHANNEL_ENABLE);
-        }
+            @Override
+            public void onSearchConfirmed(CharSequence text) {
+                if (text.length() > 1){
+                    MainActivity.this.words = text.toString();
+                    updateNewsTabs();
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "Type more than two letters!", Toast.LENGTH_SHORT).show();
+                }
 
-        for (NewsChannelBean bean : channelList) {
-            NewsRecycleView nrc = new NewsRecycleView();
-            Bundle bundle = new Bundle();
-            bundle.putString("words", this.words);
-            bundle.putString("category", bean.getChannelName());
-            nrc.setArguments(bundle);
-            fragments.add(nrc);
-        }
+            }
+
+            @Override
+            public void onButtonClicked(int buttonCode) {
+                switch (buttonCode) {
+                    case MaterialSearchBar.BUTTON_NAVIGATION:
+                        drawer.openDrawer(Gravity.LEFT);
+                        break;
+                    case MaterialSearchBar.BUTTON_SPEECH:
+                        break;
+                    case MaterialSearchBar.BUTTON_BACK:
+                        searchBar.disableSearch();
+                        break;
+                }
+            }
+        });
+        searchBar.setNavButtonEnabled(true);
+
+        //restore last queries from disk
+        searchBar.setLastSuggestions(historyStringList);
+        //Inflate menu and setup OnMenuItemClickListener
+        searchBar.inflateMenu(R.menu.main);
+        searchBar.getMenu().setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.action_search){
+                    //startActivityForResult(new Intent(MainActivity.globalContext, SearchActivity.class), ACTIVITY_TYPE_SEACHER);
+                }
+                if (id == R.id.action_settings) {
+                    return true;
+                }
+                return false;
+            }
+        });
     }
+
+    /*
+     * implement with floatingSearchView, but i can't understand how to show history
+     * so it changed to MaterialSeaerchBar
+    public void initSearchView(){
+        floatingSearchView = findViewById(R.id.floating_search_view);
+        floatingSearchView.attachNavigationDrawerToMenuButton(drawer);
+        floatingSearchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
+            @Override
+            public void onActionMenuItemSelected(MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.action_search){
+                    startActivityForResult(new Intent(MainActivity.globalContext, SearchActivity.class), ACTIVITY_TYPE_SEACHER);
+                }
+            }
+        });
+
+        floatingSearchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
+            @Override
+            public void onBindSuggestion(View suggestionView, ImageView leftIcon,
+                                         TextView textView, SearchSuggestion item, int itemPosition) {
+            }
+
+        });
+        floatingSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
+            @Override
+            public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+
+            }
+
+            @Override
+            public void onSearchAction(String currentQuery) {
+                if (currentQuery.length() > 1){
+                    MainActivity.this.words = currentQuery;
+                    updateNewsTabs();
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "Type more than two letters!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+    */
 
     public void updateNewsTabs(){
         fragments.clear();
         channelList.clear();
-        channelList = dao.query(Constant.NEWS_CHANNEL_ENABLE);
+        channelList = newsChannelDao.query(Constant.NEWS_CHANNEL_ENABLE);
         System.out.println("channel list size " + channelList.size());
 
         for (NewsChannelBean bean : channelList) {
@@ -164,6 +286,9 @@ public class MainActivity extends AppCompatActivity
             case ACTIVITY_TYPE_CHANNEL_MANAGER:
                 Toast.makeText(this, "onActivityResult", Toast.LENGTH_SHORT).show();
                 updateNewsTabs();
+
+            case ACTIVITY_TYPE_SEACHER:
+                Toast.makeText(this, "seacher return", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -181,36 +306,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-
-        // searchView
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
-
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setQueryHint("Search Latest News...");
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(MainActivity.this, query, Toast.LENGTH_SHORT).show();
-                if (query.length() > 1){
-                    MainActivity.this.words = query;
-                    updateNewsTabs();
-                }
-                else {
-                    Toast.makeText(MainActivity.this, "Type more than two letters!", Toast.LENGTH_SHORT).show();
-                }
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-
-        searchMenuItem.getIcon().setVisible(false, false);
+        // getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -219,13 +315,15 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item_news_list clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        // int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
+        // //noinspection SimplifiableIfStatement
+        // if (id == R.id.action_search){
+        //     startActivityForResult(new Intent(this, SearchActivity.class), ACTIVITY_TYPE_SEACHER);
+        // }
+        // if (id == R.id.action_settings) {
+        //     return true;
+        // }
         return super.onOptionsItemSelected(item);
     }
 
@@ -254,5 +352,15 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // save suggestions(history) to database
+        historyStringList = searchBar.getLastSuggestions();
+        for(String suggestions : historyStringList){
+            searchHistoryDao.add(suggestions);
+        }
     }
 }

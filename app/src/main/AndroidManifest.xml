@@ -43,6 +43,9 @@
         <activity android:name=".HistoryActivity"
             android:label="History"
             />
+        <activity android:name=".SearchActivity"
+            android:label="Search"
+            />
     </application>
 
 </manifest>
