@@ -18,6 +18,8 @@ import com.example.newsapp.util.Constant;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 
@@ -163,6 +165,15 @@ public class MainActivity extends AppCompatActivity
                 if(enabled){
                 }
                 else{
+                    if(searchBar.getText().equals("")){
+                        /*
+                            为了实现，当用户手动将搜索框清空为0 退出searchBar时，搜索内容转为关键字为空的情形
+                            添加了当搜索状态转变，即用户点击返回按钮时 updateNewsTabs, words = ""
+                         */
+                        Toast.makeText(MainActivity.this, "text change to null", Toast.LENGTH_SHORT).show();
+                        words = "";
+                        updateNewsTabs();
+                    }
                 }
             }
 
@@ -192,6 +203,22 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+//        searchBar.addTextChangeListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//
+//            }
+//        });
         searchBar.setNavButtonEnabled(true);
 
         //restore last queries from disk
@@ -213,48 +240,48 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    /*
-     * implement with floatingSearchView, but i can't understand how to show history
-     * so it changed to MaterialSeaerchBar
-    public void initSearchView(){
-        floatingSearchView = findViewById(R.id.floating_search_view);
-        floatingSearchView.attachNavigationDrawerToMenuButton(drawer);
-        floatingSearchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
-            @Override
-            public void onActionMenuItemSelected(MenuItem item) {
-                int id = item.getItemId();
-                if (id == R.id.action_search){
-                    startActivityForResult(new Intent(MainActivity.globalContext, SearchActivity.class), ACTIVITY_TYPE_SEACHER);
-                }
-            }
-        });
+    //*
+    // * implement with floatingSearchView, but i can't understand how to show history
+    // * so it changed to MaterialSeaerchBar
+    //public void initSearchView(){
+    //    floatingSearchView = findViewById(R.id.floating_search_view);
+    //    floatingSearchView.attachNavigationDrawerToMenuButton(drawer);
+    //    floatingSearchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
+    //        @Override
+    //        public void onActionMenuItemSelected(MenuItem item) {
+    //            int id = item.getItemId();
+    //            if (id == R.id.action_search){
+    //                startActivityForResult(new Intent(MainActivity.globalContext, SearchActivity.class), ACTIVITY_TYPE_SEACHER);
+    //            }
+    //        }
+    //    });
 
-        floatingSearchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
-            @Override
-            public void onBindSuggestion(View suggestionView, ImageView leftIcon,
-                                         TextView textView, SearchSuggestion item, int itemPosition) {
-            }
+    //    floatingSearchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
+    //        @Override
+    //        public void onBindSuggestion(View suggestionView, ImageView leftIcon,
+    //                                     TextView textView, SearchSuggestion item, int itemPosition) {
+    //        }
 
-        });
-        floatingSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
-            @Override
-            public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+    //    });
+    //    floatingSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
+    //        @Override
+    //        public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
 
-            }
+    //        }
 
-            @Override
-            public void onSearchAction(String currentQuery) {
-                if (currentQuery.length() > 1){
-                    MainActivity.this.words = currentQuery;
-                    updateNewsTabs();
-                }
-                else {
-                    Toast.makeText(MainActivity.this, "Type more than two letters!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-    */
+    //        @Override
+    //        public void onSearchAction(String currentQuery) {
+    //            if (currentQuery.length() > 1){
+    //                MainActivity.this.words = currentQuery;
+    //                updateNewsTabs();
+    //            }
+    //            else {
+    //                Toast.makeText(MainActivity.this, "Type more than two letters!", Toast.LENGTH_SHORT).show();
+    //            }
+    //        }
+    //    });
+    //}
+    //*/
 
     public void updateNewsTabs(){
         fragments.clear();
