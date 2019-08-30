@@ -85,7 +85,6 @@ public class NewsRecycleView extends Fragment {
                         page ++;
                         request();
                         easyRefreshLayout.loadMoreComplete();
-                        Toast.makeText(getActivity(), "Yeah, load more !!!!", Toast.LENGTH_SHORT).show();
                     }
                 }, 1000);
             }
@@ -99,7 +98,7 @@ public class NewsRecycleView extends Fragment {
                         page = 1;
                         request();
                         easyRefreshLayout.refreshComplete();
-                        Toast.makeText(getActivity(), "Yeah, refreshed !!!!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Refreshed!", Toast.LENGTH_SHORT).show();
                     }
                 }, 1000);
             }
@@ -125,6 +124,9 @@ public class NewsRecycleView extends Fragment {
             @Override
             public void onResponse(Call<NewsData> call, Response<NewsData> response) {
                 //progressDialog.dismiss();
+                if(response.body().getData().size() == 0){
+                    Toast.makeText(getActivity(), "On Earth !!", Toast.LENGTH_SHORT).show();
+                }
                 newsList.addAll(response.body().getData());
                 mAdapter.notifyDataSetChanged();
             }
@@ -133,7 +135,7 @@ public class NewsRecycleView extends Fragment {
             public void onFailure(Call<NewsData> call, Throwable t) {
                 // progressDialog.dismiss();
                 // TODO: load error activity
-                Toast.makeText(getActivity(), "Load error.... maybe retry....", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Load error... maybe retry...", Toast.LENGTH_SHORT).show();
             }
         });
     }

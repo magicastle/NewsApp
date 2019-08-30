@@ -84,12 +84,10 @@
 1. 开始使用了Android 自带的控件，美观好用但是无法进行历史记录
 2. 打算新建SearchActivity手写实现，但是感觉过于麻烦（其实自己后来查找框架的时间应该也能手写出来了）
 3. 尝试了几个SearchView框架，[floatingSearchView](<https://github.com/arimorty/floatingsearchview>) 对于实现Suggestions(History)的方式有点看不明白，又尝试了，看到过内置好数据库的[MaterialSearchView](<https://github.com/lapism/MaterialSearchView>)，但是也没用起来，最后用了[MaterialSearchBar](<https://github.com/mancj/MaterialSearchBar>), 加上自己实现的数据库
-
-
-
-## TODO：
-
-
+4. **目前问题**：
+   1. 因为想要实现当搜索词清空后返回主界面，关键词变为空，所以进行了一些设置，但是现在导致每次点击搜索框不干什么事也会导致重新加载（删去了增加的设置，感觉正常的逻辑也是可以的）
+   2. 键盘不会自己下降（已修复）
+   3. Bug: list里第一个记录无法删除
 
 
 

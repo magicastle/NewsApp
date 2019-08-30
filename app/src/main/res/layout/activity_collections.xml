@@ -6,10 +6,10 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:context=".CollectionActivity">
 
-    <com.ajguan.library.EasyRefreshLayout
-        android:id="@+id/collections_erl"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <!--<com.ajguan.library.EasyRefreshLayout-->
+        <!--android:id="@+id/collections_erl"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/collections_rcv"
@@ -21,7 +21,7 @@ tools:context=".CollectionActivity">
             app:layoutManager="LinearLayoutManager">
 
         </androidx.recyclerview.widget.RecyclerView>
-    </com.ajguan.library.EasyRefreshLayout>
+    <!--</com.ajguan.library.EasyRefreshLayout>-->
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
