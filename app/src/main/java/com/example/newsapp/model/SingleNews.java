@@ -113,17 +113,19 @@ public class SingleNews implements Serializable {
     public String getImageString(){
         return this.image;
     }
+
     public String[] getImage()
     {
-        //System.out.println("image is "+image);
+        System.out.println("image is "+image);
         String tmpImage = image.substring(1,image.length()-1);
-        //System.out.println("image iss "+image);
-        String[] images;
-        if(tmpImage.length()>0)
-            images=tmpImage.split(",");
+        String[] images;//
+        if(tmpImage.length()>0) {
+            tmpImage = tmpImage.replaceAll("\\]\\s+\\[", ",");
+            images = tmpImage.split(",");
+        }
         else images=new String[0];
         System.out.println("images.length="+images.length);
-        System.out.println(Arrays.asList(images));
+
         return images;
     }
     public  String getUrl(){return this.url;}
