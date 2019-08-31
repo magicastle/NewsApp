@@ -6,6 +6,8 @@ import android.view.MenuItem;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.billy.android.swipe.SmartSwipe;
+import com.billy.android.swipe.consumer.ActivitySlidingBackConsumer;
 import com.example.newsapp.adapter.MyNewsListAdapter;
 import com.example.newsapp.bean.NewsCollectionsOrHistoryBean;
 import com.example.newsapp.database.NewsCollectionsDao;
@@ -64,6 +66,14 @@ public class HistoryActivity extends BaseActivity{
         recyclerView = findViewById(R.id.history_rcv);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+        SmartSwipe.wrap(this)
+                .addConsumer(new ActivitySlidingBackConsumer(this))
+                //设置联动系数
+                .setRelativeMoveFactor(0.5F)
+                //指定可侧滑返回的方向，如：enableLeft() 仅左侧可侧滑返回
+                .enableLeft()
+        ;
     }
 
 
