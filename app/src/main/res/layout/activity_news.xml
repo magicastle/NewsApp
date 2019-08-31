@@ -58,7 +58,9 @@
                 android:id="@+id/news_image"
                 android:layout_width="match_parent"
                 android:layout_height="360dp"
-                android:layout_margin="15dp"/>
+                android:layout_margin="15dp"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="true"/>
 
             <TextView
                 android:id="@+id/new_detail_content_tv"

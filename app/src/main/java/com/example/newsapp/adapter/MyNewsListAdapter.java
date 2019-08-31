@@ -2,14 +2,26 @@ package com.example.newsapp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.example.newsapp.MainActivity;
 import com.example.newsapp.NewsDetailActivity;
 import com.example.newsapp.R;
@@ -36,6 +48,7 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         TextView title;
         TextView contentAbstract;
         TextView publishInfo;
+
 
         public MyViewHolder(View itemView){
             super(itemView);
@@ -91,6 +104,7 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         holder.title.setText(news.getTitle());
         holder.contentAbstract.setText(news.getAbstract());
         holder.publishInfo.setText("  " + news.getPublisher() + "     " + news.getPublishTime());
+
 
         // TODO: 查看是否已经在History数据库中，如果有，就 Bina 灰 View
         List<NewsCollectionsOrHistoryBean> list = historyDao.query(news.getNewsID());
