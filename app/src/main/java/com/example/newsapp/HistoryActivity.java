@@ -40,7 +40,7 @@ public class HistoryActivity extends BaseActivity{
         historyList = dao.query();
         System.out.println("history List items num : " + historyList.size());
         newsList = new ArrayList<>();
-        for(int i = 0;i < historyList.size();i ++){
+        for(int i = historyList.size() - 1; i >= 0; i--){
             newsList.add(new SingleNews(
                     historyList.get(i).getImage(),
                     historyList.get(i).getPublishTime(),

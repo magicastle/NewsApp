@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity
     private String words = "";
     private final int ACTIVITY_TYPE_CHANNEL_MANAGER = 1;
     private final int ACTIVITY_TYPE_SEACHER = 2;
+    private final int AcTIVITY_TYPE_SETTING = 3;
     public static Context globalContext;
     public static Activity mainActivity;
     private NewsChannelDao newsChannelDao;
@@ -309,7 +310,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_collections){
             startActivity(new Intent(this, CollectionActivity.class));
-        } else if (id == R.id.nav_tools) {
+        } else if (id == R.id.nav_settings) {
+            startActivityForResult(new Intent(this, SettingActivity.class), AcTIVITY_TYPE_SETTING);
 
         } else if (id == R.id.nav_share) {
 
