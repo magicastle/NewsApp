@@ -45,6 +45,7 @@ import android.view.Menu;
 import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -128,12 +129,6 @@ public class MainActivity extends AppCompatActivity
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.addDrawerListener(toggle);
-//        toggle.syncState();
-
-
         initSearchBar();
 
         tabLayout = findViewById(R.id.tab_layout_news);
@@ -156,6 +151,7 @@ public class MainActivity extends AppCompatActivity
         myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragments, channelList);
         viewPager.setAdapter(myPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+
     }
 
     public void initSearchBar(){

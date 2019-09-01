@@ -22,10 +22,10 @@ public class NewsChannelDao {
     public void addInitData(){
         String categoryId[] = MainActivity.globalContext.getResources().getStringArray(R.array.news_category_id);
         String categoryName[] = MainActivity.globalContext.getResources().getStringArray(R.array.news_category_name);
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             add(categoryId[i], categoryName[i], Constant.NEWS_CHANNEL_ENABLE, i);
         }
-        for (int i = 5; i < categoryId.length; i++) {
+        for (int i = 6; i < categoryId.length; i++) {
             add(categoryId[i], categoryName[i], Constant.NEWS_CHANNEL_DISABLE, i);
         }
     }
