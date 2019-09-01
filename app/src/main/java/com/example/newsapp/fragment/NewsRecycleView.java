@@ -46,17 +46,13 @@ public class NewsRecycleView extends Fragment {
     private String category = "";
     private String queryCategory = "";
     private Integer pageNum = 1;
-    // judge whether be the end
-    private Boolean onEarth = false;
-//    private Boolean requestSuccessful = false;
 
-    private ProgressDialog progressDialog;
-    private NewsData newsData;
     private List<SingleNews> newsList;
     private HashSet<String> newsIDSet;
     private List<String> keywordsList;
     private int keywordsIndex = 0;
     private int recursionDepth = 0;
+    private int delayMillis = 1000;
     private RecyclerView recyclerView;
     private MyNewsListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -85,6 +81,7 @@ public class NewsRecycleView extends Fragment {
         return view;
     }
 
+    public NewsRecycleView(){}
     public void initView(){
         recyclerView = view.findViewById(R.id.recyclerview);
         layoutManager = new LinearLayoutManager(getActivity());
@@ -98,24 +95,22 @@ public class NewsRecycleView extends Fragment {
         initErrorLayout();
     }
     public void initEasyRreshLayout(){
+        if(this.category.equals("推荐")){
+            delayMillis = 3500;
+        }
         easyRefreshLayout = view.findViewById(R.id.easy_refresh_layout);
         easyRefreshLayout.addEasyEvent(new EasyRefreshLayout.EasyEvent() {
+            // 推荐频道请求较多，增加了更多的动画加载时间
             @Override
             public void onLoadMore() {
-                if(onEarth == false){
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            pageNum++;
-                            request();
-                            easyRefreshLayout.loadMoreComplete();
-                        }
-                    }, 1000);
-                }
-                else{
-                    Toast.makeText(getActivity(), "On Earth !!", Toast.LENGTH_SHORT).show();
-                    easyRefreshLayout.loadMoreComplete();
-                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        pageNum++;
+                        request();
+                        easyRefreshLayout.loadMoreComplete();
+                    }
+                }, delayMillis);
             }
 
             @Override
@@ -124,12 +119,13 @@ public class NewsRecycleView extends Fragment {
                     @Override
                     public void run() {
                         newsList.clear();
+                        newsIDSet.clear();
                         pageNum = 1;
                         request();
                         easyRefreshLayout.refreshComplete();
                         Toast.makeText(getActivity(), "Refreshed!", Toast.LENGTH_SHORT).show();
                     }
-                }, 1000);
+                }, delayMillis);
             }
         });
     }
@@ -139,6 +135,26 @@ public class NewsRecycleView extends Fragment {
         errorMessage = view.findViewById(R.id.errorMessage);
         btnRetry = view.findViewById(R.id.btnRetry);
         errorLayout.setVisibility(View.GONE);
+    }
+
+    public void request(){
+        if(this.category.equals("推荐")){
+            /*
+                获取搜索关键词策略：
+                历史选 3 条，收藏 1 条，每条各选最多 2 个keyWord,形成总的KeyWord列表
+                对于Keyword例表中的每个词，进行一次查询操作,向List中添加5条新闻
+                添加一直到满page * pagesize为止
+                有可能上面策略不能满足填满 pageNum * pagesize 监测newsList size变化,必要时将关键词置为 ""
+             */
+            keywordsList = new ArrayList<>();
+            keywordsList.addAll(historyDao.getHistoryBrowseKeyWords());
+            keywordsList.addAll(collectionsDao.getHistoryBrowseKeyWords());
+            System.out.println(keywordsList);
+
+            keywordsIndex = 0;
+        }
+        recursionDepth = 0;
+        connect();
     }
     public void connect(){
         // 根据category类别初始化 queryWords 和 queryCategory
@@ -174,22 +190,21 @@ public class NewsRecycleView extends Fragment {
                     List<SingleNews> requestList = response.body().getData();
 
                     // 没有内容，说明已经达到底部，更新onEarth标志
-                    if(requestList.size() == 0){
+                    if(queryWords.equals(words) && requestList.size() == 0){
                         Toast.makeText(getActivity(), "On Earth !!", Toast.LENGTH_SHORT).show();
                         System.out.println("on earth" + queryWords + " " + queryCategory);
-                        onEarth = true;
                         return;
                     }
 
                     // 成功返回内容，更新 newsList
-                   if(category.equals("推荐")){
+                    if(category.equals("推荐")){
                         /*
                             注意新闻填充逻辑：因为加入了要填满pageNum * pageSize 的限制以及历史信息不填充的限制
                             所以要避免出现为达到要求发生死循环
                          */
                         System.out.println("Yeah ,tuijian " + queryWords + " " + queryCategory);
                         // 避免推荐列表重复，添加newsIDSet control
-//                        int tmp = 0;
+                        int tmp = 0;
                         for (SingleNews news : requestList){
                             /*
                                 添加条件：
@@ -199,32 +214,26 @@ public class NewsRecycleView extends Fragment {
                              */
                             String id = news.getNewsID();
                             if(!newsIDSet.contains(id) && !historyDao.contain(id) && newsList.size() < pageNum *pageSize){
+                                System.out.println("add news");
                                 newsIDSet.add(id);
                                 newsList.add(news);
-//                                if(!queryWords.equals(""))
-//                                    tmp ++;
-//                                if(tmp > 5)
-//                                    break;
+                                if(!queryWords.equals(""))
+                                    tmp ++;
+                                if(tmp > 2)
+                                    break;
                             }
                         }
                         keywordsIndex ++;
-                        if(keywordsIndex < keywordsList.size() + 2){
+                        if(keywordsIndex < keywordsList.size() + 1){
                             recursionDepth ++;
                             connect();
                         }
-
-//                        if(newsList.size() < pageNum * pageSize){
-//                            keywordsIndex ++;
-//                            recursionDepth ++;
-//                            connect();
-//                        }
                     }
                     else{
                         newsList.addAll(requestList);
                     }
 
                     if(recursionDepth == 0){
-                        System.out.println("notifyDataseteChanged");
                         mAdapter.notifyDataSetChanged();
                     }
                     else {
@@ -235,32 +244,12 @@ public class NewsRecycleView extends Fragment {
 
             @Override
             public void onFailure(Call<NewsData> call, Throwable t) {
+                if(newsList.size() == 0){
+                    showErrorMessage("network error", "retry...");
+                }
                 Toast.makeText(getActivity(), "Load error... maybe retry...", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-    public void request(){
-        if(this.category.equals("推荐")){
-            /*
-                获取搜索关键词策略：
-                历史选 3 条，收藏 1 条，每条各选最多 2 个keyWord,形成总的KeyWord列表
-                对于Keyword例表中的每个词，进行一次查询操作,向List中添加5条新闻
-                添加一直到满page * pagesize为止
-                有可能上面策略不能满足填满 pageNum * pagesize 监测newsList size变化,必要时将关键词置为 ""
-             */
-            int curSize = newsList.size();
-            keywordsList = new ArrayList<>();
-            keywordsList.addAll(historyDao.getHistoryBrowseKeyWords());
-            keywordsList.addAll(collectionsDao.getHistoryBrowseKeyWords());
-            System.out.println(keywordsList);
-
-            keywordsIndex = 0;
-        }{
-            this.queryWords = this.words;
-            this.queryCategory = this.category;
-        }
-        recursionDepth = 0;
-        connect();
     }
     private void showErrorMessage(String title, String message){
         if (errorLayout.getVisibility() == View.GONE) {
