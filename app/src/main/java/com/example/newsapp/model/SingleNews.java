@@ -110,12 +110,24 @@ public class SingleNews implements Serializable {
     }
     public String getPublisher(){return this.publisher;}
     public String getPublishTime(){return this.publishTime;}
+    public String getUrl(){return this.url;}
+    public String getKeywords(){
+        String key = "";
+        if(keyWords != null){
+            for(ScoreAndWord saw : keyWords){
+                if (saw.score > 0.1){
+                    key = key + saw.word + ",";
+                }
+            }
+        }
+        if(key.length() != 0)
+            key = key.substring(0, key.length() - 1);
+        return key;
+    }
     public String getImageString(){
         return this.image;
     }
-
-    public String[] getImage()
-    {
+    public String[] getImage() {
         System.out.println("image is "+image);
         String tmpImage = image.substring(1,image.length()-1);
         String[] images;//
@@ -128,15 +140,14 @@ public class SingleNews implements Serializable {
 
         return images;
     }
-    public  String getUrl(){return this.url;}
 
 }
 
 class ScoreAndWord implements Serializable{
     @SerializedName("score")
-    private float score;
+    public float score;
     @SerializedName("word")
-    private String word;
+    public String word;
 
     ScoreAndWord(float score, String word){
         this.score = score;

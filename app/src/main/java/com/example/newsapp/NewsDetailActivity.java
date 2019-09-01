@@ -124,8 +124,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         switchbutton=(Switch) menu.findItem(R.id.switchbutton).getActionView().findViewById(R.id.switchForActionBar);
 
         if(news != null){
-            List<NewsCollectionsOrHistoryBean> list = collectionsDao.query(news.getNewsID());
-            if(list.size() != 0){
+            if(collectionsDao.contain(news.getNewsID())){
                 switchbutton.setChecked(true);
             }
         }
@@ -142,7 +141,8 @@ public class NewsDetailActivity extends AppCompatActivity {
                                 news.getPublishTime(),
                                 news.getPublisher(),
                                 news.getTitle(),
-                                news.getContent()
+                                news.getContent(),
+                                news.getKeywords()
                         );
                     }
                     else

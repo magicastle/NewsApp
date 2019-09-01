@@ -19,7 +19,7 @@ public class NewsHistoryDao {
     public void addInitData(){
     }
 
-    public boolean add(String newsID, String image, String publishTime, String publisher, String title, String content){
+    public boolean add(String newsID, String image, String publishTime, String publisher, String title, String content, String keywords){
         ContentValues values = new ContentValues();
         values.put(NewsHistoryTable.ID, newsID);
         values.put(NewsHistoryTable.IMAGE, image);
@@ -27,28 +27,11 @@ public class NewsHistoryDao {
         values.put(NewsHistoryTable.PUBLISHER, publisher);
         values.put(NewsHistoryTable.TITLE, title);
         values.put(NewsHistoryTable.CONTENT, content);
+        values.put(NewsHistoryTable.KEYWORDS, keywords);
         long result = db.insertWithOnConflict(NewsHistoryTable.TABLENAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         return result != -1;
     }
 
-    public List<NewsCollectionsOrHistoryBean> query(String ID){
-        Cursor cursor = db.query(NewsHistoryTable.TABLENAME, null, NewsCollectionsTable.ID + "=?", new String[]{ID}, null, null, null, null);
-        List<NewsCollectionsOrHistoryBean> list = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            NewsCollectionsOrHistoryBean bean = new NewsCollectionsOrHistoryBean();
-
-            bean.setNewsID(cursor.getString(NewsHistoryTable.ID_ID));
-            bean.setImage(cursor.getString(NewsHistoryTable.ID_IMAGE));
-            bean.setPublishTime(cursor.getString(NewsHistoryTable.ID_PUBLISHTIME));
-            bean.setPublisher(cursor.getString(NewsHistoryTable.ID_PUBLISHER));
-            bean.setTitle(cursor.getString(NewsHistoryTable.ID_TITLE));
-            bean.setContent(cursor.getString(NewsHistoryTable.ID_CONSTANT));
-
-            list.add(bean);
-        }
-        cursor.close();
-        return list;
-    }
     public List<NewsCollectionsOrHistoryBean> query() {
         Cursor cursor = db.query(NewsHistoryTable.TABLENAME, null, null, null, null, null, null);
         List<NewsCollectionsOrHistoryBean> list = new ArrayList<>();
@@ -60,10 +43,19 @@ public class NewsHistoryDao {
             bean.setPublisher(cursor.getString(NewsHistoryTable.ID_PUBLISHER));
             bean.setTitle(cursor.getString(NewsHistoryTable.ID_TITLE));
             bean.setContent(cursor.getString(NewsHistoryTable.ID_CONSTANT));
+            bean.setKeywords(cursor.getString(NewsHistoryTable.ID_KEYWORDS));
             list.add(bean);
         }
         cursor.close();
         return list;
+    }
+
+    public boolean contain(String newsID){
+        Cursor cursor = db.query(NewsHistoryTable.TABLENAME, null, NewsCollectionsTable.ID + "=?", new String[]{newsID}, null, null, null, null);
+        if(cursor.moveToNext()){
+            return true;
+        }
+        return false;
     }
 
     public void updateAll(List<NewsCollectionsOrHistoryBean> list) {

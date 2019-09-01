@@ -238,9 +238,6 @@ public class MainActivity extends AppCompatActivity
 
         myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragments, channelList);
         viewPager.setAdapter(myPagerAdapter);
-
-        // 因为 viewpager notifydatasetchanged 本身有一些问题，查阅资料后发现是无法使用的
-        //myPagerAdapter.notifyDataSetChanged();
     }
 
     @Override

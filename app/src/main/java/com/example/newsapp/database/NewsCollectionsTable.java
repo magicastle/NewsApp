@@ -17,6 +17,8 @@ public class NewsCollectionsTable {
     public static final String PUBLISHER = "publisher";
     public static final String TITLE = "title";
     public static final String CONTENT = "content";
+    public static final String KEYWORDS = "keywords";
+    public static final int ID_KEYWORDS = 6;
 
     /**
      * 字段ID 数据库操作建立字段对应关系 从0开始
@@ -37,5 +39,6 @@ public class NewsCollectionsTable {
             PUBLISHTIME + " text, " +
             PUBLISHER + " text, " +
             TITLE + " text, " +
-            CONTENT + " text) ";
+            CONTENT + " text, " +
+            KEYWORDS + " text) ";
 }

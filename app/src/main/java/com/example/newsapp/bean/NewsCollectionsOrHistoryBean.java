@@ -14,6 +14,7 @@ public class NewsCollectionsOrHistoryBean {
     private String publisher;
     private String title;
     private String content;
+    private String keywords;
 
 
     public void setNewsID(String newsID){
@@ -60,4 +61,7 @@ public class NewsCollectionsOrHistoryBean {
     public String getImage(){
         return this.image;
     }
+
+    public void setKeywords(String keywords){this.keywords = keywords;}
+    public String getKeywords(){return this.keywords;}
 }

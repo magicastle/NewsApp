@@ -19,7 +19,7 @@ public class NewsCollectionsDao {
     public void addInitData(){
     }
 
-    public boolean add(String newsID, String image, String publishTime, String publisher, String title, String content){
+    public boolean add(String newsID, String image, String publishTime, String publisher, String title, String content, String keyWords){
         ContentValues values = new ContentValues();
         values.put(NewsCollectionsTable.ID, newsID);
         values.put(NewsCollectionsTable.IMAGE, image);
@@ -27,6 +27,7 @@ public class NewsCollectionsDao {
         values.put(NewsCollectionsTable.PUBLISHER, publisher);
         values.put(NewsCollectionsTable.TITLE, title);
         values.put(NewsCollectionsTable.CONTENT, content);
+        values.put(NewsCollectionsTable.KEYWORDS, keyWords);
         long result = db.insertWithOnConflict(NewsCollectionsTable.TABLENAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         return result != -1;
     }
@@ -36,23 +37,13 @@ public class NewsCollectionsDao {
         return result != -1;
     }
 
-    public List<NewsCollectionsOrHistoryBean> query(String ID){
-        Cursor cursor = db.query(NewsCollectionsTable.TABLENAME, null, NewsCollectionsTable.ID + "=?", new String[]{ID}, null, null, null, null);
-        List<NewsCollectionsOrHistoryBean> list = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            NewsCollectionsOrHistoryBean bean = new NewsCollectionsOrHistoryBean();
-
-            bean.setNewsID(cursor.getString(NewsCollectionsTable.ID_ID));
-            bean.setImage(cursor.getString(NewsCollectionsTable.ID_IMAGE));
-            bean.setPublishTime(cursor.getString(NewsCollectionsTable.ID_PUBLISHTIME));
-            bean.setPublisher(cursor.getString(NewsCollectionsTable.ID_PUBLISHER));
-            bean.setTitle(cursor.getString(NewsCollectionsTable.ID_TITLE));
-            bean.setContent(cursor.getString(NewsCollectionsTable.ID_CONSTANT));
-
-            list.add(bean);
+    public boolean contain(String newsID){
+        Cursor cursor = db.query(NewsCollectionsTable.TABLENAME, null, NewsCollectionsTable.ID + "=?", new String[]{newsID}, null, null, null, null);
+        if(cursor.moveToNext()){
+            return true;
         }
         cursor.close();
-        return list;
+        return false;
     }
 
     public List<NewsCollectionsOrHistoryBean> query() {
@@ -67,6 +58,7 @@ public class NewsCollectionsDao {
             bean.setPublisher(cursor.getString(NewsCollectionsTable.ID_PUBLISHER));
             bean.setTitle(cursor.getString(NewsCollectionsTable.ID_TITLE));
             bean.setContent(cursor.getString(NewsCollectionsTable.ID_CONSTANT));
+            bean.setKeywords(cursor.getString(NewsCollectionsTable.ID_KEYWORDS));
 
             list.add(bean);
         }

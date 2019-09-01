@@ -15,6 +15,7 @@ public class NewsHistoryTable {
     public static final String PUBLISHER = "publisher";
     public static final String TITLE = "title";
     public static final String CONTENT = "content";
+    public static final String KEYWORDS = "keywords";
 
     /**
      * 字段ID 数据库操作建立字段对应关系 从0开始
@@ -25,6 +26,7 @@ public class NewsHistoryTable {
     public static final int ID_PUBLISHER = 3;
     public static final int ID_TITLE = 4;
     public static final int ID_CONSTANT = 5;
+    public static final int ID_KEYWORDS = 6;
 
     /**
      * 创建表
@@ -35,5 +37,6 @@ public class NewsHistoryTable {
             PUBLISHTIME + " text, " +
             PUBLISHER + " text, " +
             TITLE + " text, " +
-            CONTENT + " text) ";
+            CONTENT + " text, " +
+            KEYWORDS + " text) ";
 }

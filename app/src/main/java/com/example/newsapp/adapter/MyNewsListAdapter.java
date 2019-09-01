@@ -74,18 +74,20 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     // notifyDataSetChanged();
 
                     // 点击新闻即加入到 History 数据库中
-                    historyDao.add(news.getNewsID(),
+                    historyDao.add(
+                            news.getNewsID(),
                             news.getImageString(),
                             news.getPublishTime(),
                             news.getPublisher(),
                             news.getTitle(),
-                            news.getContent()
+                            news.getContent(),
+                            news.getKeywords()
                     );
 
                     // start newsDetail page
                     // context 为构造时传入的adapter所在activity/fragment的context
-                    context.startActivity(intent);
-                }
+                        context.startActivity(intent);
+                    }
             });
 
         }
