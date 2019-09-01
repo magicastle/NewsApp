@@ -41,9 +41,9 @@
 
             <ImageView
                 android:id="@+id/image_right"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="7"
+                android:layout_weight="3"
                 android:paddingLeft="10dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
@@ -52,9 +52,9 @@
 
             <TextView
                 android:id="@+id/item_newsAbstract"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
+                android:layout_weight="7"
                 android:maxLines="4"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"

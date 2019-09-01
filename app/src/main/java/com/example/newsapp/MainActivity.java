@@ -235,6 +235,7 @@ public class MainActivity extends AppCompatActivity
 
         myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragments, channelList);
         viewPager.setAdapter(myPagerAdapter);
+        viewPager.setOffscreenPageLimit(12);
     }
 
     @Override

@@ -56,6 +56,7 @@ public class NewsRecycleView extends Fragment {
     private HashSet<String> newsIDSet;
     private List<String> keywordsList;
     private int keywordsIndex = 0;
+    private int recursionDepth = 0;
     private RecyclerView recyclerView;
     private MyNewsListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -188,9 +189,7 @@ public class NewsRecycleView extends Fragment {
                          */
                         System.out.println("Yeah ,tuijian " + queryWords + " " + queryCategory);
                         // 避免推荐列表重复，添加newsIDSet control
-                        if(!queryWords.equals("")){
-                             requestList = requestList.subList(0, Math.min(3, response.body().getData().size()));
-                        }
+//                        int tmp = 0;
                         for (SingleNews news : requestList){
                             /*
                                 添加条件：
@@ -202,18 +201,35 @@ public class NewsRecycleView extends Fragment {
                             if(!newsIDSet.contains(id) && !historyDao.contain(id) && newsList.size() < pageNum *pageSize){
                                 newsIDSet.add(id);
                                 newsList.add(news);
+//                                if(!queryWords.equals(""))
+//                                    tmp ++;
+//                                if(tmp > 5)
+//                                    break;
                             }
                         }
-                        if(newsList.size() < pageNum * pageSize){
-                            keywordsIndex ++;
+                        keywordsIndex ++;
+                        if(keywordsIndex < keywordsList.size() + 2){
+                            recursionDepth ++;
                             connect();
                         }
+
+//                        if(newsList.size() < pageNum * pageSize){
+//                            keywordsIndex ++;
+//                            recursionDepth ++;
+//                            connect();
+//                        }
                     }
                     else{
                         newsList.addAll(requestList);
                     }
 
-                    mAdapter.notifyDataSetChanged();
+                    if(recursionDepth == 0){
+                        System.out.println("notifyDataseteChanged");
+                        mAdapter.notifyDataSetChanged();
+                    }
+                    else {
+                        recursionDepth --;
+                    }
                 }
             }
 
@@ -243,6 +259,7 @@ public class NewsRecycleView extends Fragment {
             this.queryWords = this.words;
             this.queryCategory = this.category;
         }
+        recursionDepth = 0;
         connect();
     }
     private void showErrorMessage(String title, String message){
