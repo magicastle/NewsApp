@@ -73,7 +73,7 @@ public class NewsDetailActivity extends AppCompatActivity {
             RequestListener mRequestListener = new RequestListener() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
-                    Log.d("NewsDetailActivity", "onException: " + e.toString() + "  model:" + model + " isFirstResource: " + isFirstResource);
+                    //Log.d("NewsDetailActivity", "onException: " + e.toString() + "  model:" + model + " isFirstResource: " + isFirstResource);
                     imageView.setImageResource(R.mipmap.ic_launcher);
                     return false;
                 }
@@ -167,14 +167,8 @@ public class NewsDetailActivity extends AppCompatActivity {
                 shareIntent.setType("text/plain");
                 startActivity(Intent.createChooser(shareIntent, "send to..."));
 
-                Toast.makeText(this,"share",Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.mark:
-                Toast.makeText(this,"mark",Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.download:
-                Toast.makeText(this,"download",Toast.LENGTH_SHORT).show();
-                break;
+
             case android.R.id.home:
                 finish();
                 break;
