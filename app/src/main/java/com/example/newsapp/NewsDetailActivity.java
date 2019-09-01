@@ -68,8 +68,6 @@ public class NewsDetailActivity extends AppCompatActivity {
         String urls[]= news.getImage();//images lists
         if(urls.length>0)
         {
-            System.out.println(urls[0]);
-
             RequestListener mRequestListener = new RequestListener() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {

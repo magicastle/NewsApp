@@ -115,8 +115,6 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                 if(urls.length>0)
                 {
-                    System.out.println(news.getTitle()+" "+urls[0]);
-
                     RequestListener mRequestListener = new RequestListener() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
@@ -142,10 +140,8 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                             .apply(options)
                             .listener(mRequestListener)
                             .into(holder.image_right);
-                    System.out.println("load....");
                 }
                 else{
-                    System.out.println(news.getTitle()+"  else......");
                     holder.image_right.setVisibility(View.GONE);
                 }
 

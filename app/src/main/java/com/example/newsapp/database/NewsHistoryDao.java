@@ -61,6 +61,13 @@ public class NewsHistoryDao {
     public void updateAll(List<NewsCollectionsOrHistoryBean> list) {
     }
 
+    public int getCount(){
+        Cursor cursor = db.query(NewsHistoryTable.TABLENAME, null, null, null, null, null, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
+
     public boolean removeAll() {
         int result = db.delete(NewsHistoryTable.TABLENAME, null, null);
         return result != -1;

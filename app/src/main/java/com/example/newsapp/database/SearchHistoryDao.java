@@ -26,14 +26,6 @@ public class SearchHistoryDao {
         ContentValues values = new ContentValues();
         values.put(SearchHistoryTable.SEARCH_WORD, searchWord);
         long result = db.insertWithOnConflict(SearchHistoryTable.TABLENAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-
-//        String sql = "select count(*) from " + SearchHistoryTable.TABLENAME;
-//        Cursor cursor1 = db.rawQuery(sql, null);
-//        cursor1.moveToFirst();
-//        long count = cursor1.getLong(0);
-//        cursor1.close();
-//        System.out.println("db size : " + count);
-
         return result != -1;
     }
 

@@ -38,7 +38,6 @@ public class HistoryActivity extends BaseActivity{
 
     public void initData(){
         historyList = dao.query();
-        System.out.println("history List items num : " + historyList.size());
         newsList = new ArrayList<>();
         for(int i = historyList.size() - 1; i >= 0; i--){
             newsList.add(new SingleNews(
@@ -60,6 +59,7 @@ public class HistoryActivity extends BaseActivity{
                     null
             ));
         }
+
     }
     public void initView(){
         adapter = new MyNewsListAdapter(newsList, this);
@@ -75,8 +75,6 @@ public class HistoryActivity extends BaseActivity{
                 .enableLeft()
         ;
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){

@@ -120,7 +120,6 @@ public class MainActivity extends AppCompatActivity
         historyBeansList = searchHistoryDao.query();
         for(SearchHistoryBean bean : historyBeansList){
             historyStringList.add(bean.getSearchWord());
-            System.out.println("find " + bean.getSearchWord() + " lll");
         }
     }
 
@@ -224,8 +223,6 @@ public class MainActivity extends AppCompatActivity
         fragments.clear();
         channelList.clear();
         channelList = newsChannelDao.query(Constant.NEWS_CHANNEL_ENABLE);
-        System.out.println("channel list size " + channelList.size());
-
         for (NewsChannelBean bean : channelList) {
             // TODO : 推荐频道
             NewsRecycleView nrc = new NewsRecycleView();

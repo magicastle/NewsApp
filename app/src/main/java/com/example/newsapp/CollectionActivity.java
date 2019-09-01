@@ -36,7 +36,6 @@ public class CollectionActivity extends BaseActivity{
 
     public void initData(){
         collectionsList = dao.query();
-        System.out.println("collections List items num : " + collectionsList.size());
         newsList = new ArrayList<>();
         for(int i =  collectionsList.size() - 1; i >= 0; i --){
             newsList.add(new SingleNews(
@@ -57,7 +56,6 @@ public class CollectionActivity extends BaseActivity{
                     null,
                     null
             ));
-            System.out.println(collectionsList.get(i).getImage());
         }
     }
     public void initView(){

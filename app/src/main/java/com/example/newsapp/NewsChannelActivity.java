@@ -92,7 +92,6 @@ public class NewsChannelActivity extends BaseActivity {
             NewsChannelBean bean = disableItems.get(i);
             dao.add(bean.getChannelId(), bean.getChannelName(), Constant.NEWS_CHANNEL_DISABLE, i);
         }
-        System.out.println("onSaveData : "+ dao.query(Constant.NEWS_CHANNEL_ENABLE).size());
     }
 }
 

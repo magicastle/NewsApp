@@ -76,7 +76,6 @@ public class NewsRecycleView extends Fragment {
 
         initView();
         request();
-        System.out.println("new build fragment news list: " + words + " " + category);
         return view;
     }
 
@@ -202,18 +201,11 @@ public class NewsRecycleView extends Fragment {
         }
     }
     private void showErrorMessage(String title, String message){
-        System.out.println("showErrorMessage");
-
         if (errorLayout.getVisibility() == View.GONE) {
             errorLayout.setVisibility(View.VISIBLE);
         }
-
-        System.out.println("showErrorMessage");
         errorTitle.setText(title);
-        System.out.println("showErrorMessage");
         errorMessage.setText(message);
-        System.out.println("showErrorMessage");
-
         btnRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
