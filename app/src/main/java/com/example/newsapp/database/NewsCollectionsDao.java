@@ -73,4 +73,15 @@ public class NewsCollectionsDao {
         int result = db.delete(NewsCollectionsTable.TABLENAME, null, null);
         return result != -1;
     }
+    public List<String> getHistoryBrowseKeyWords(){
+        List<String> res = new ArrayList<>();
+        Cursor cursor = db.query(NewsCollectionsTable.TABLENAME, null, null, null, null, null, null);
+        if(cursor.moveToLast()){
+            String[] ss = cursor.getString(6).split(",");
+            for(int i = 0; i < Math.min(2, ss.length);i ++)
+                res.add(ss[i]);
+        }
+        cursor.close();
+        return res;
+    }
 }
