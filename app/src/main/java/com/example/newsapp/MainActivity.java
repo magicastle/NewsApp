@@ -3,12 +3,9 @@ package com.example.newsapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.input.InputManager;
 import android.os.Bundle;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
-import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
-import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.example.newsapp.adapter.MyPagerAdapter;
 import com.example.newsapp.bean.NewsChannelBean;
 import com.example.newsapp.bean.SearchHistoryBean;
@@ -17,10 +14,7 @@ import com.example.newsapp.database.SearchHistoryDao;
 import com.example.newsapp.fragment.NewsRecycleView;
 import com.example.newsapp.util.Constant;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 
@@ -42,11 +36,8 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.Menu;
-import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -71,7 +62,7 @@ public class MainActivity extends AppCompatActivity
     private String words = "";
     private final int ACTIVITY_TYPE_CHANNEL_MANAGER = 1;
     private final int ACTIVITY_TYPE_SEACHER = 2;
-    private final int AcTIVITY_TYPE_SETTING = 3;
+    private final int ACTIVITY_TYPE_SETTING = 3;
     public static Context globalContext;
     public static Activity mainActivity;
     private NewsChannelDao newsChannelDao;
@@ -240,7 +231,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
             case ACTIVITY_TYPE_CHANNEL_MANAGER:
                 Toast.makeText(this, "onActivityResult", Toast.LENGTH_SHORT).show();
@@ -302,7 +293,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_collections){
             startActivity(new Intent(this, CollectionActivity.class));
         } else if (id == R.id.nav_settings) {
-            startActivityForResult(new Intent(this, SettingActivity.class), AcTIVITY_TYPE_SETTING);
+            startActivityForResult(new Intent(this, SettingActivity.class), ACTIVITY_TYPE_SETTING);
 
         } else if (id == R.id.nav_share) {
 
