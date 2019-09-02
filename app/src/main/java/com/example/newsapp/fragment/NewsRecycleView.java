@@ -52,7 +52,6 @@ public class NewsRecycleView extends Fragment {
     private List<String> keywordsList;
     private int keywordsIndex = 0;
     private int recursionDepth = 0;
-    private int delayMillis = 1000;
     private RecyclerView recyclerView;
     private MyNewsListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -60,6 +59,8 @@ public class NewsRecycleView extends Fragment {
     private TextView errorTitle, errorMessage;
     private Button btnRetry;
     private EasyRefreshLayout easyRefreshLayout;
+    private boolean easyLoadMoreTag = false;
+    private boolean easyRefreshTag = false;
     private NewsHistoryDao historyDao = new NewsHistoryDao();
     private NewsCollectionsDao collectionsDao = new NewsCollectionsDao();
 
@@ -95,9 +96,6 @@ public class NewsRecycleView extends Fragment {
         initErrorLayout();
     }
     public void initEasyRreshLayout(){
-        if(this.category.equals("推荐")){
-            delayMillis = 3500;
-        }
         easyRefreshLayout = view.findViewById(R.id.easy_refresh_layout);
         easyRefreshLayout.addEasyEvent(new EasyRefreshLayout.EasyEvent() {
             // 推荐频道请求较多，增加了更多的动画加载时间
@@ -107,11 +105,11 @@ public class NewsRecycleView extends Fragment {
                     @Override
                     public void run() {
                         pageNum++;
+                        easyLoadMoreTag = true;
                         request();
-                        easyRefreshLayout.loadMoreComplete();
                     }
-                }, delayMillis);
-            }
+                }, 0);
+        }
 
             @Override
             public void onRefreshing() {
@@ -121,11 +119,10 @@ public class NewsRecycleView extends Fragment {
                         newsList.clear();
                         newsIDSet.clear();
                         pageNum = 1;
+                        easyRefreshTag = true;
                         request();
-                        easyRefreshLayout.refreshComplete();
-                        Toast.makeText(getActivity(), "Refreshed!", Toast.LENGTH_SHORT).show();
                     }
-                }, delayMillis);
+                }, 0);
             }
         });
     }
@@ -235,6 +232,14 @@ public class NewsRecycleView extends Fragment {
 
                     if(recursionDepth == 0){
                         mAdapter.notifyDataSetChanged();
+                        if(easyLoadMoreTag){
+                            easyLoadMoreTag = false;
+                            easyRefreshLayout.loadMoreComplete();
+                        }
+                        if(easyRefreshTag){
+                            easyRefreshTag = false;
+                            easyRefreshLayout.refreshComplete();
+                        }
                     }
                     else {
                         recursionDepth --;
