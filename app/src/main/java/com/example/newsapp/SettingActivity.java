@@ -1,8 +1,10 @@
 package com.example.newsapp;
 
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,8 +15,11 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.DrawableRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
-public class SettingActivity extends BaseActivity {
+
+public class SettingActivity extends AppCompatActivity {
     private Switch switch_night;
     private Switch switch_data;
     private Button button_color;
@@ -22,6 +27,7 @@ public class SettingActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Application app = (Application) this.getApplication();
         setContentView(R.layout.activity_setting);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        getSupportActionBar().setDisplayShowCustomEnabled(true);
@@ -37,9 +43,22 @@ public class SettingActivity extends BaseActivity {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b) {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        //recreate();
+                        finish();
+                        final Intent themeIntent=getIntent();
+                        themeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(themeIntent);
+                        overridePendingTransition(0,0);
 
                     } else {
-
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        finish();
+                        final Intent themeIntent=getIntent();
+                        themeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(themeIntent);
+                        overridePendingTransition(0,0);
+                        //recreate();
                     }
                 }
             });
