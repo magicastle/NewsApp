@@ -8,9 +8,9 @@
         app:actionLayout="@layout/menu_relaty"
         />
 
-    <item
-        android:id="@+id/share"
-        android:title="share" />
+    <!--<item-->
+        <!--android:id="@+id/share"-->
+        <!--android:title="share" />-->
 
 
 </menu>

@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,17 +45,24 @@ public class NewsDetailActivity extends AppCompatActivity {
 
     private ImageView imageView;
     private Switch switchbutton;
+    private ImageView share;
+    private ImageView collection;
+    private View.OnClickListener viewClickListener;
     private NewsCollectionsDao collectionsDao = new NewsCollectionsDao();
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+
         // find component
         news = (SingleNews) getIntent().getSerializableExtra("news");
 
         if(news != null){
+
             initView();
         }
     }
@@ -64,6 +72,61 @@ public class NewsDetailActivity extends AppCompatActivity {
         titleTextView.setText(news.getTitle());
         contentTextView= findViewById(R.id.new_detail_content_tv);
         contentTextView.setText(news.getContent());
+
+        share=new ImageView(this);
+        share.setId(R.id.myShare);
+        //share.setPadding(60,0,0,0);
+        share.setImageDrawable(getResources().getDrawable(R.drawable.ic_share_white_24dp));
+        getSupportActionBar().setCustomView(share);
+
+
+        collection=new ImageView(this);
+        collection.setId(R.id.myCollection);
+        collection.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_border_black_24dp));
+        //getSupportActionBar().setCustomView(collection);
+
+        viewClickListener =new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch(view.getId())
+                {
+                    case R.id.myShare:
+                        Intent shareIntent = new Intent();
+                        shareIntent.setAction(Intent.ACTION_SEND);
+                        //shareIntent.setData(Uri.parse("myapp://dosomething"));
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, news.getAbstract() + "\n" + news.getUrl());
+                        shareIntent.setType("text/plain");
+                        startActivity(Intent.createChooser(shareIntent, "send to..."));
+                        break;
+//                    case R.id.myCollection:
+//                        if(isCollection)
+//                        {
+//                            isCollection=!isCollection;
+//                            collection.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_border_black_24dp));
+//                            collectionsDao.delete(news.getNewsID());
+//                        }
+//                        else
+//                        {
+//                            isCollection=!isCollection;
+//                            collection.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_yellow_24dp));
+//                            collectionsDao.add(
+//                                    news.getNewsID(),
+//                                    news.getImageString(),
+//                                    news.getPublishTime(),
+//                                    news.getPublisher(),
+//                                    news.getTitle(),
+//                                    news.getContent()
+//                            );
+//                        }
+//
+//                        break;
+                }
+            }
+        };
+
+        share.setOnClickListener(viewClickListener);
+        collection.setOnClickListener(viewClickListener);
+
         imageView=findViewById(R.id.news_image);
         String urls[]= news.getImage();//images lists
         if(urls.length>0)
@@ -121,6 +184,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.hide,menu);
+
         switchbutton=(Switch) menu.findItem(R.id.switchbutton).getActionView().findViewById(R.id.switchForActionBar);
 
         if(news != null){
@@ -158,16 +222,17 @@ public class NewsDetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-            case R.id.share:
+//            case R.id.share:
+//
+//                Intent shareIntent = new Intent();
+//                shareIntent.setAction(Intent.ACTION_SEND);
+//                //shareIntent.setData(Uri.parse("myapp://dosomething"));
+//                shareIntent.putExtra(Intent.EXTRA_TEXT, news.getAbstract()+"\n"+ news.getUrl());
+//                shareIntent.setType("text/plain");
+//                startActivity(Intent.createChooser(shareIntent, "send to..."));
+//
+//                break;
 
-                Intent shareIntent = new Intent();
-                shareIntent.setAction(Intent.ACTION_SEND);
-                //shareIntent.setData(Uri.parse("myapp://dosomething"));
-                shareIntent.putExtra(Intent.EXTRA_TEXT, news.getAbstract()+"\n"+ news.getUrl());
-                shareIntent.setType("text/plain");
-                startActivity(Intent.createChooser(shareIntent, "send to..."));
-
-                break;
 
             case android.R.id.home:
                 finish();
