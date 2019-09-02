@@ -1,6 +1,6 @@
 package com.example.newsapp.fragment;
 
-import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ajguan.library.EasyRefreshLayout;
+import com.example.newsapp.MainActivity;
+import com.example.newsapp.NewsDetailActivity;
 import com.example.newsapp.R;
 import com.example.newsapp.adapter.MyNewsListAdapter;
 import com.example.newsapp.database.NewsCollectionsDao;
@@ -26,6 +28,7 @@ import com.example.newsapp.model.NewsData;
 import com.example.newsapp.model.SingleNews;
 import com.example.newsapp.network.GetDataService;
 import com.example.newsapp.network.RetrofitClientInstance;
+import com.example.newsapp.util.Constant;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -53,7 +56,7 @@ public class NewsRecycleView extends Fragment {
     private int keywordsIndex = 0;
     private int recursionDepth = 0;
     private RecyclerView recyclerView;
-    private MyNewsListAdapter mAdapter;
+    private MyNewsListAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private RelativeLayout errorLayout;
     private TextView errorTitle, errorMessage;
@@ -82,6 +85,16 @@ public class NewsRecycleView extends Fragment {
         return view;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            // newsDetail
+            case 0 :
+                adapter.notifyDataSetChanged();
+        }
+    }
+
     public NewsRecycleView(){}
     public void initView(){
         recyclerView = view.findViewById(R.id.recyclerview);
@@ -89,16 +102,40 @@ public class NewsRecycleView extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         newsList = new ArrayList<>();
         newsIDSet = new HashSet<>();
-        mAdapter = new MyNewsListAdapter(newsList, getActivity());
-        recyclerView.setAdapter(mAdapter);
-
+        adapter = new MyNewsListAdapter(newsList, getActivity(), Constant.LIST_TYPE_NEWS);
+        recyclerView.setAdapter(adapter);
+        initAdapter();
         initEasyRreshLayout();
         initErrorLayout();
+    }
+    public void initAdapter(){
+        adapter.setOnItemClickListener(new MyNewsListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(getActivity(), "click" + position, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.mainActivity, NewsDetailActivity.class);
+                    SingleNews news= newsList.get(position);
+                    intent.putExtra("news", news);
+
+                    // 点击新闻即加入到 History 数据库中
+                    historyDao.add(
+                            news.getNewsID(),
+                            news.getImageString(),
+                            news.getPublishTime(),
+                            news.getPublisher(),
+                            news.getTitle(),
+                            news.getContent(),
+                            news.getKeywords()
+                    );
+
+                    // start newsDetail page
+                    startActivityForResult(intent, 0);
+            }
+        });
     }
     public void initEasyRreshLayout(){
         easyRefreshLayout = view.findViewById(R.id.easy_refresh_layout);
         easyRefreshLayout.addEasyEvent(new EasyRefreshLayout.EasyEvent() {
-            // 推荐频道请求较多，增加了更多的动画加载时间
             @Override
             public void onLoadMore() {
                 new Handler().postDelayed(new Runnable() {
@@ -231,7 +268,7 @@ public class NewsRecycleView extends Fragment {
                     }
 
                     if(recursionDepth == 0){
-                        mAdapter.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                         if(easyLoadMoreTag){
                             easyLoadMoreTag = false;
                             easyRefreshLayout.loadMoreComplete();
@@ -256,7 +293,7 @@ public class NewsRecycleView extends Fragment {
             }
         });
     }
-    private void showErrorMessage(String title, String message){
+    public void showErrorMessage(String title, String message){
         if (errorLayout.getVisibility() == View.GONE) {
             errorLayout.setVisibility(View.VISIBLE);
         }
@@ -270,4 +307,5 @@ public class NewsRecycleView extends Fragment {
             }
         });
     }
+
 }
