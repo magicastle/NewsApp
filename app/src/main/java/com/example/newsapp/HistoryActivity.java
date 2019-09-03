@@ -1,8 +1,12 @@
 package com.example.newsapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +17,7 @@ import com.example.newsapp.bean.NewsCollectionsOrHistoryBean;
 import com.example.newsapp.database.NewsCollectionsDao;
 import com.example.newsapp.database.NewsHistoryDao;
 import com.example.newsapp.model.SingleNews;
+import com.example.newsapp.util.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,10 +67,11 @@ public class HistoryActivity extends BaseActivity{
 
     }
     public void initView(){
-        adapter = new MyNewsListAdapter(newsList, this);
+        adapter = new MyNewsListAdapter(newsList, this, Constant.LIST_TYPE_HISTORY);
         recyclerView = findViewById(R.id.history_rcv);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+        initAdapter();
 
         SmartSwipe.wrap(this)
                 .addConsumer(new ActivitySlidingBackConsumer(this))
@@ -74,6 +80,25 @@ public class HistoryActivity extends BaseActivity{
                 //指定可侧滑返回的方向，如：enableLeft() 仅左侧可侧滑返回
                 .enableLeft()
         ;
+    }
+
+    public void initAdapter(){
+        adapter.setOnItemClickListener(new MyNewsListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(MainActivity.mainActivity, NewsDetailActivity.class);
+                SingleNews news= newsList.get(position);
+                intent.putExtra("news", news);
+
+                // start newsDetail page
+                startActivityForResult(intent, 0);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

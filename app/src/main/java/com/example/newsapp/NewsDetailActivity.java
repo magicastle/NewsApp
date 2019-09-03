@@ -11,10 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,15 +26,16 @@ import com.bumptech.glide.*;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.*;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
-import com.example.newsapp.bean.NewsCollectionsOrHistoryBean;
 import com.example.newsapp.database.NewsCollectionsDao;
 import com.example.newsapp.model.SingleNews;
 import com.mob.MobSDK;
 
-import java.util.List;
+
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+
 
 import cn.sharesdk.onekeyshare.OnekeyShare;
 
@@ -52,6 +51,8 @@ public class NewsDetailActivity extends AppCompatActivity {
     private ImageView collection;
     private View.OnClickListener viewClickListener;
     private NewsCollectionsDao collectionsDao = new NewsCollectionsDao();
+    private StandardGSYVideoPlayer videoPlayer;
+    private OrientationUtils orientationUtils;
 
 
     @Override
@@ -96,28 +97,6 @@ public class NewsDetailActivity extends AppCompatActivity {
                     case R.id.myShare:
                         showShare();
                         break;
-//                    case R.id.myCollection:
-//                        if(isCollection)
-//                        {
-//                            isCollection=!isCollection;
-//                            collection.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_border_black_24dp));
-//                            collectionsDao.delete(news.getNewsID());
-//                        }
-//                        else
-//                        {
-//                            isCollection=!isCollection;
-//                            collection.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_yellow_24dp));
-//                            collectionsDao.add(
-//                                    news.getNewsID(),
-//                                    news.getImageString(),
-//                                    news.getPublishTime(),
-//                                    news.getPublisher(),
-//                                    news.getTitle(),
-//                                    news.getContent()
-//                            );
-//                        }
-//
-//                        break;
                 }
             }
         };
@@ -125,6 +104,60 @@ public class NewsDetailActivity extends AppCompatActivity {
         share.setOnClickListener(viewClickListener);
         collection.setOnClickListener(viewClickListener);
 
+        initImageView();
+        initVideoView();
+
+        SmartSwipe.wrap(this)
+                .addConsumer(new ActivitySlidingBackConsumer(this))
+                //设置联动系数
+                .setRelativeMoveFactor(0.5F)
+                //指定可侧滑返回的方向，如：enableLeft() 仅左侧可侧滑返回
+                .enableLeft()
+        ;
+
+    }
+
+    public void initVideoView(){
+        String videoUrl = news.getVideo();
+        videoPlayer = findViewById(R.id.video_player);
+        if(videoUrl.equals("")){
+            videoPlayer.setVisibility(View.INVISIBLE);
+        }
+        else{
+            //String videoUrl = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+            videoPlayer.setUp(videoUrl, true, "测试视频");
+            ImageView imageView = new ImageView(this);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setImageResource(R.drawable.ic_favorite_white_24dp);
+            videoPlayer.setThumbImageView(imageView);
+            //增加title
+            videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
+            //设置返回键
+            videoPlayer.getBackButton().setVisibility(View.VISIBLE);
+            //设置旋转
+            orientationUtils = new OrientationUtils(this, videoPlayer);
+            //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
+            videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    orientationUtils.resolveByClick();
+                }
+            });
+            //是否可以滑动调整
+            videoPlayer.setIsTouchWiget(true);
+            //设置返回按键功能
+            videoPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+            videoPlayer.startPlayLogic();
+
+        }
+    }
+
+    public void initImageView(){
         imageView=findViewById(R.id.news_image);
         String urls[]= news.getImage();//images lists
         if(urls.length>0)
@@ -138,7 +171,7 @@ public class NewsDetailActivity extends AppCompatActivity {
                 }
                 @Override
                 public boolean onResourceReady(Object resource, Object model, Target target, DataSource dataSource, boolean isFirstResource) {
-                   // Log.e("NewsDetailActivity",  "model:"+model+" isFirstResource: "+isFirstResource);
+                    // Log.e("NewsDetailActivity",  "model:"+model+" isFirstResource: "+isFirstResource);
 
                     ViewGroup.LayoutParams params = imageView.getLayoutParams();
                     int vw = imageView.getWidth() - imageView.getPaddingLeft() - imageView.getPaddingRight();
@@ -165,15 +198,6 @@ public class NewsDetailActivity extends AppCompatActivity {
         else{
             imageView.setVisibility(View.GONE);
         }
-
-        SmartSwipe.wrap(this)
-                .addConsumer(new ActivitySlidingBackConsumer(this))
-                //设置联动系数
-                .setRelativeMoveFactor(0.5F)
-                //指定可侧滑返回的方向，如：enableLeft() 仅左侧可侧滑返回
-                .enableLeft()
-        ;
-
         Toast.makeText(this, "image"+urls.length , Toast.LENGTH_LONG).show();
     }
 

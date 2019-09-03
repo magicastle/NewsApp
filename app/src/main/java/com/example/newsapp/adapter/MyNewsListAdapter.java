@@ -1,7 +1,7 @@
 package com.example.newsapp.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,15 +23,10 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.example.newsapp.MainActivity;
-import com.example.newsapp.NewsDetailActivity;
 import com.example.newsapp.R;
-import com.example.newsapp.bean.NewsCollectionsOrHistoryBean;
-import com.example.newsapp.database.NewsCollectionsDao;
 import com.example.newsapp.database.NewsHistoryDao;
 import com.example.newsapp.model.SingleNews;
 import com.example.newsapp.util.Constant;
-import com.example.newsapp.util.SelectedItem;
 
 import java.util.List;
 
@@ -38,10 +34,30 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private List<SingleNews> newsList;
     private Context context;
     private NewsHistoryDao historyDao = new NewsHistoryDao();
+    private int listType;
 
-    public MyNewsListAdapter(List<SingleNews> newsList, Context context){
+
+
+    //点击 RecyclerView 某条的监听
+    public interface OnItemClickListener{
+        void onItemClick(View view, int position);
+
+    }
+
+    private OnItemClickListener onItemClickListener;
+
+    /**
+     * 设置RecyclerView某个的监听
+     * @param onItemClickListener
+     */
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public MyNewsListAdapter(List<SingleNews> newsList, Context context, int listType){
         this.newsList = newsList;
         this.context = context;
+        this.listType = listType;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -50,10 +66,12 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         TextView publishInfo;
         ImageView image_right;
         String newsID;
+        LinearLayout linearLayout;
 
         public MyViewHolder(View itemView){
             super(itemView);
 
+            linearLayout = itemView.findViewById(R.id.item_liner_layout);
             title = itemView.findViewById(R.id.item_newsTitle);
             contentAbstract = itemView.findViewById(R.id.item_newsAbstract);
             publishInfo = itemView.findViewById(R.id.item_newsPublishInfo);
@@ -63,33 +81,11 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
-
-                    // MainActivity.mainActivity 为定义的static常量，不然的话从Mainactivity -> NewsRecycleView(Fragment) -> Adapter -> here 一层层传实在太烦了
-                    Intent intent = new Intent(MainActivity.mainActivity, NewsDetailActivity.class);
-                    SingleNews news= newsList.get(getAdapterPosition());
-                    intent.putExtra("news", news);
-
-                    // 为了标识点击事件
-                    // SelectedItem.setSelectedNavItem(getAdapterPosition());
-                    // notifyDataSetChanged();
-
-                    // 点击新闻即加入到 History 数据库中
-                    historyDao.add(
-                            news.getNewsID(),
-                            news.getImageString(),
-                            news.getPublishTime(),
-                            news.getPublisher(),
-                            news.getTitle(),
-                            news.getContent(),
-                            news.getKeywords()
-                    );
-
-                    // start newsDetail page
-                    // context 为构造时传入的adapter所在activity/fragment的context
-                        context.startActivity(intent);
+                    if(onItemClickListener != null){
+                        onItemClickListener.onItemClick(view, getAdapterPosition());
                     }
+                }
             });
-
         }
     }
 
@@ -102,10 +98,20 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return new MyViewHolder(view);
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holders, int position) {
         MyViewHolder holder = (MyViewHolder) holders;
         SingleNews news = newsList.get(position);
+
+        // 读过变色
+        if(listType == Constant.LIST_TYPE_NEWS && historyDao.contain(news.getNewsID())){
+            holder.linearLayout.setBackgroundColor(R.color.colorReaded);
+        //    holder.title.setBackgroundColor(R.color.grey);
+        //    holder.contentAbstract.setBackgroundColor(R.color.grey);
+        //    holder.publishInfo.setBackgroundColor(R.color.grey);
+        }
+
         if(!holder.newsID.equals(news.getNewsID())){
             holder.title.setText(news.getTitle());
             holder.contentAbstract.setText(news.getAbstract());
@@ -144,8 +150,6 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             else{
                 holder.image_right.setVisibility(View.GONE);
             }
-
-            //holder.isAdded = true;
         }
     }
 

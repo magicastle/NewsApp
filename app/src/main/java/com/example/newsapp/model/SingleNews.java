@@ -111,6 +111,9 @@ public class SingleNews implements Serializable {
     public String getPublisher(){return this.publisher;}
     public String getPublishTime(){return this.publishTime;}
     public String getUrl(){return this.url;}
+    public String getVideo(){
+        return this.video;
+    }
     public String getKeywords(){
         String key = "";
         if(keyWords != null){
