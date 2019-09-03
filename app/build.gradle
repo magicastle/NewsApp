@@ -40,6 +40,8 @@ dependencies {
     implementation 'androidx.viewpager2:viewpager2:1.0.0-beta03'
 
 
+    implementation group: 'androidx.preference', name: 'preference', version: '1.0.0'
+
     implementation 'androidx.recyclerview:recyclerview:1.1.0-beta03'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.1.0-alpha09'

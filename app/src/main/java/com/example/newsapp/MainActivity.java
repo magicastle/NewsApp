@@ -3,6 +3,7 @@ package com.example.newsapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
@@ -12,13 +13,16 @@ import com.example.newsapp.bean.SearchHistoryBean;
 import com.example.newsapp.database.NewsChannelDao;
 import com.example.newsapp.database.SearchHistoryDao;
 import com.example.newsapp.fragment.NewsRecycleView;
+import com.example.newsapp.fragment.SettingsFragment;
 import com.example.newsapp.util.Constant;
+import com.example.newsapp.util.Variable;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.view.Gravity;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.view.GravityCompat;
 
@@ -33,6 +37,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.Menu;
@@ -47,17 +53,13 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private FloatingActionButton fab;
-    private Toolbar toolbar;
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ImageView modifyNewsChannel;
-    private FloatingSearchView floatingSearchView;
     private MaterialSearchBar searchBar;
     private FloatingActionButton floatingActionButton;
-
 
     private String words = "";
     private final int ACTIVITY_TYPE_CHANNEL_MANAGER = 1;
@@ -76,6 +78,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setNightMode();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -84,6 +88,16 @@ public class MainActivity extends AppCompatActivity
         // initData 需要在 initView 之前完成，这样才知道要有多少个tab(fragment)需要建立
         initData();
         initView();
+    }
+
+    public void setNightMode(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if(sharedPreferences.getBoolean("night_mode", false)){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
 
     public void initData(){
@@ -238,7 +252,15 @@ public class MainActivity extends AppCompatActivity
                 updateNewsTabs();
 
             case ACTIVITY_TYPE_SEACHER:
-                Toast.makeText(this, "seacher return", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "search return", Toast.LENGTH_SHORT).show();
+
+            case ACTIVITY_TYPE_SETTING:
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                // night-mode changed
+                if(Variable.settingChanged)
+                {
+                    recreate();
+                }
         }
     }
 
@@ -294,7 +316,6 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(this, CollectionActivity.class));
         } else if (id == R.id.nav_settings) {
             startActivityForResult(new Intent(this, SettingActivity.class), ACTIVITY_TYPE_SETTING);
-
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_history) {
