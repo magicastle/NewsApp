@@ -142,7 +142,7 @@ public class NewsDetailActivity extends AppCompatActivity {
             imagesList.add(image);
         }
         if(imagesList.size() == 0){
-            xBanner.setVisibility(View.INVISIBLE);
+            xBanner.setVisibility(View.GONE);
 
         }
         else {
@@ -160,8 +160,6 @@ public class NewsDetailActivity extends AppCompatActivity {
                             .load(imagesList.get(position))
                             .apply(options)
                             .into((ImageView) view);
-                    Toast.makeText(NewsDetailActivity.this, position + " " + imagesList.get(position), Toast.LENGTH_SHORT).show();
-                    System.out.println("NewsDetail: " + position + " " + imagesList.get(position));
                 }
             }
             );
@@ -171,7 +169,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     public void initVideoView(){
         String videoUrl = news.getVideo();
         if(videoUrl.equals("")){
-            videoPlayer.setVisibility(View.INVISIBLE);
+            videoPlayer.setVisibility(View.GONE);
         }
         else{
             //String videoUrl = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
