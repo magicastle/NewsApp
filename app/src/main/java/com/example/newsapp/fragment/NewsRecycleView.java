@@ -112,7 +112,6 @@ public class NewsRecycleView extends Fragment {
         adapter.setOnItemClickListener(new MyNewsListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(getActivity(), "click" + position, Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(MainActivity.mainActivity, NewsDetailActivity.class);
                     SingleNews news= newsList.get(position);
                     intent.putExtra("news", news);
@@ -227,6 +226,14 @@ public class NewsRecycleView extends Fragment {
                     if(queryWords.equals(words) && requestList.size() == 0){
                         Toast.makeText(getActivity(), "On Earth !!", Toast.LENGTH_SHORT).show();
                         System.out.println("on earth" + queryWords + " " + queryCategory);
+                        if(easyLoadMoreTag){
+                            easyLoadMoreTag = false;
+                            easyRefreshLayout.loadMoreComplete();
+                        }
+                        if(easyRefreshTag){
+                            easyRefreshTag = false;
+                            easyRefreshLayout.refreshComplete();
+                        }
                         return;
                     }
 
@@ -281,6 +288,9 @@ public class NewsRecycleView extends Fragment {
                     else {
                         recursionDepth --;
                     }
+                }
+                else{
+
                 }
             }
 
