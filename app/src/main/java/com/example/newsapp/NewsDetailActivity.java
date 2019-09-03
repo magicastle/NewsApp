@@ -29,12 +29,15 @@ import com.bumptech.glide.request.*;
 import com.bumptech.glide.request.target.Target;
 import com.example.newsapp.database.NewsCollectionsDao;
 import com.example.newsapp.model.SingleNews;
+import com.mob.MobSDK;
 
 
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
+
+import cn.sharesdk.onekeyshare.OnekeyShare;
 
 public class NewsDetailActivity extends AppCompatActivity {
 
@@ -92,12 +95,7 @@ public class NewsDetailActivity extends AppCompatActivity {
                 switch(view.getId())
                 {
                     case R.id.myShare:
-                        Intent shareIntent = new Intent();
-                        shareIntent.setAction(Intent.ACTION_SEND);
-                        //shareIntent.setData(Uri.parse("myapp://dosomething"));
-                        shareIntent.putExtra(Intent.EXTRA_TEXT, news.getAbstract() + "\n" + news.getUrl());
-                        shareIntent.setType("text/plain");
-                        startActivity(Intent.createChooser(shareIntent, "send to..."));
+                        showShare();
                         break;
                 }
             }
@@ -245,22 +243,44 @@ public class NewsDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
 //            case R.id.share:
-//
-//                Intent shareIntent = new Intent();
-//                shareIntent.setAction(Intent.ACTION_SEND);
-//                //shareIntent.setData(Uri.parse("myapp://dosomething"));
-//                shareIntent.putExtra(Intent.EXTRA_TEXT, news.getAbstract()+"\n"+ news.getUrl());
-//                shareIntent.setType("text/plain");
-//                startActivity(Intent.createChooser(shareIntent, "send to..."));
-//
+//                showShare();
 //                break;
-
-
             case android.R.id.home:
                 finish();
                 break;
             default:
         }
         return true;
+    }
+
+    private void showShare() {
+
+        OnekeyShare oks = new OnekeyShare();
+        // title标题，微信、QQ和QQ空间等平台使用
+        oks.setTitle(news.getTitle());
+        // titleUrl QQ和QQ空间跳转链接
+        //oks.setTitleUrl(news.getUrl());
+        // text是分享文本，所有平台都需要这个字段
+        oks.setText(news.getAbstract());
+        //分享网络图片，新浪微博分享网络图片需要通过审核后申请高级写入接口，否则请注释掉测试新浪微博
+        if(news.getImage().length!=0)
+            oks.setImageUrl(news.getImage()[0]);
+        else
+        // imagePath是图片的本地路径，确保SDcard下面存在此张图片
+        //换成我们最后的APP图标放在对的路径里
+        oks.setImagePath("/sdcard/test.jpg");
+
+        // url在微信、Facebook等平台中使用
+        oks.setUrl(news.getUrl());
+        // 启动分享GUI
+        oks.show(this);
+
+//        //Intent method
+//        Intent shareIntent = new Intent();
+//        shareIntent.setAction(Intent.ACTION_SEND);
+//        //shareIntent.setData(Uri.parse("myapp://dosomething"));
+//        shareIntent.putExtra(Intent.EXTRA_TEXT, news.getAbstract() + "\n" + news.getUrl());
+//        shareIntent.setType("text/plain");
+//        startActivity(Intent.createChooser(shareIntent, "send to..."));
     }
 };
