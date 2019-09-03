@@ -38,7 +38,8 @@ import com.example.newsapp.util.Variable;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
-import com.stx.xhb.androidx.XBanner;
+import com.stx.xhb.xbanner.XBanner;
+//import com.stx.xhb.androidx.XBanner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,56 +140,53 @@ public class NewsDetailActivity extends AppCompatActivity {
 
     public void initBanner(){
         String[] images = news.getImage();
-        List<ImageUrlBean> imageUrlBeanList = new ArrayList<>();
+//        List<ImageUrlBean> imageUrlBeanList = new ArrayList<>();
+        List<String> imagesList = new ArrayList<>();
         for(String image : images){
-            imageUrlBeanList.add(new ImageUrlBean(image));
+//            imageUrlBeanList.add(new ImageUrlBean(image));
+            imagesList.add(image);
         }
-//        xBanner.setAutoPlayAble(false);
-        xBanner.setBannerData(imageUrlBeanList);
+        xBanner.setData(imagesList, null);
         xBanner.loadImage(new XBanner.XBannerAdapter() {
             @Override
             public void loadBanner(XBanner banner, Object model, View view, int position) {
-                RequestListener mRequestListener = new RequestListener() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
-                        //Log.d("NewsDetailActivity", "onException: " + e.toString() + "  model:" + model + " isFirstResource: " + isFirstResource);
-                        imageView.setImageResource(R.mipmap.ic_launcher);
-                        return false;
-                    }
-                    @Override
-                    public boolean onResourceReady(Object resource, Object model, Target target, DataSource dataSource, boolean isFirstResource) {
-                        // Log.e("NewsDetailActivity",  "model:"+model+" isFirstResource: "+isFirstResource);
-
-                        ViewGroup.LayoutParams params = imageView.getLayoutParams();
-                        int vw = imageView.getWidth() - imageView.getPaddingLeft() - imageView.getPaddingRight();
-                        float scale = (float) vw /(float) (((Drawable) resource).getIntrinsicWidth());
-                        int vh = Math.round(((Drawable) resource).getIntrinsicHeight() * scale);
-                        params.height=vh + imageView.getPaddingTop()+imageView.getPaddingBottom();
-                        imageView.setLayoutParams(params);
-//                        Toast.makeText(NewsDetailActivity.this, position+"", Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
-                };
-                RequestOptions options = new RequestOptions()
-                        .fitCenter()
-                        .placeholder(new ColorDrawable(Color.BLACK))
-                        .error(new ColorDrawable(Color.RED))
-                        .priority(Priority.HIGH);
-
-
-                String url = (String)imageUrlBeanList.get(position).getXBannerUrl();
-                Glide.with(getApplicationContext())
-                        .load(url)
-                        .apply(options)
-                        .listener(mRequestListener)
-                        .into((ImageView) view);
-//                //在此处使用图片加载框架加载图片，demo中使用glide加载，可替换成自己项目中的图片加载框架
-//                String url = "https://photo.tuchong.com/" + listBean.getImages().get(0).getUser_id() + "/f/" + listBean.getImages().get(0).getImg_id() + ".jpg";
-//                Glide.with(this).load(url).placeholder(R.drawable.default_image).error(R.drawable.default_image).into((ImageView) view);
-                Toast.makeText(NewsDetailActivity.this, position + " " + url, Toast.LENGTH_SHORT).show();
-                System.out.println("NewsDetail: " + position + " " + url);
+                Glide.with(NewsDetailActivity.this).load(imagesList.get(position)).into((ImageView) view);
+                Toast.makeText(NewsDetailActivity.this, position + " " + imagesList.get(position), Toast.LENGTH_SHORT).show();
             }
         });
+//        xBanner.setmAdapter(new XBanner.XBannerAdapter() {
+//            @Override
+//            public void loadBanner(XBanner banner, View view, int position) {
+//                Glide.with(NewsDetailActivity.this).load(imagesList.get(position)).into((ImageView) view);
+//            }
+//        });
+
+//        xBanner.setBannerData(imageUrlBeanList);
+//        xBanner.loadImage(new XBanner.XBannerAdapter() {
+//            @Override
+//            public void loadBanner(XBanner banner, Object model, View view, int position) {
+//                RequestOptions options = new RequestOptions()
+//                        .fitCenter()
+//                        .placeholder(new ColorDrawable(Color.BLACK))
+//                        .error(new ColorDrawable(Color.RED))
+//                        .priority(Priority.HIGH);
+//
+//
+//                String url = (String)imageUrlBeanList.get(position).getXBannerUrl();
+//                Glide.with(getApplicationContext())
+//                        .load(url)
+//                        .placeholder(R.drawable.default_image)
+//                        .error(R.drawable.default_image)
+//                        .into((ImageView) view);
+//                Glide.with(getApplicationContext())
+//                        .load(url)
+//                        .apply(options)
+//                        //.listener(mRequestListener)
+//                        .into((ImageView) view);
+//                Toast.makeText(NewsDetailActivity.this, position + " " + url, Toast.LENGTH_SHORT).show();
+//                System.out.println("NewsDetail: " + position + " " + url);
+//            }
+//        });
     }
 
     public void initVideoView(){
