@@ -96,7 +96,6 @@ public class NewsDetailActivity extends AppCompatActivity {
         collection=new ImageView(this);
         collection.setId(R.id.myCollection);
         collection.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_border_black_24dp));
-        //getSupportActionBar().setCustomView(collection);
 
         viewClickListener =new View.OnClickListener() {
             @Override
@@ -125,7 +124,6 @@ public class NewsDetailActivity extends AppCompatActivity {
         else {
             initBanner();
             initVideoView();
-//            initImageView();
         }
 
         SmartSwipe.wrap(this)
@@ -135,58 +133,39 @@ public class NewsDetailActivity extends AppCompatActivity {
                 //指定可侧滑返回的方向，如：enableLeft() 仅左侧可侧滑返回
                 .enableLeft()
         ;
-
     }
 
     public void initBanner(){
         String[] images = news.getImage();
-//        List<ImageUrlBean> imageUrlBeanList = new ArrayList<>();
         List<String> imagesList = new ArrayList<>();
         for(String image : images){
-//            imageUrlBeanList.add(new ImageUrlBean(image));
             imagesList.add(image);
         }
-        xBanner.setData(imagesList, null);
-        xBanner.loadImage(new XBanner.XBannerAdapter() {
-            @Override
-            public void loadBanner(XBanner banner, Object model, View view, int position) {
-                Glide.with(NewsDetailActivity.this).load(imagesList.get(position)).into((ImageView) view);
-                Toast.makeText(NewsDetailActivity.this, position + " " + imagesList.get(position), Toast.LENGTH_SHORT).show();
-            }
-        });
-//        xBanner.setmAdapter(new XBanner.XBannerAdapter() {
-//            @Override
-//            public void loadBanner(XBanner banner, View view, int position) {
-//                Glide.with(NewsDetailActivity.this).load(imagesList.get(position)).into((ImageView) view);
-//            }
-//        });
+        if(imagesList.size() == 0){
+            xBanner.setVisibility(View.INVISIBLE);
 
-//        xBanner.setBannerData(imageUrlBeanList);
-//        xBanner.loadImage(new XBanner.XBannerAdapter() {
-//            @Override
-//            public void loadBanner(XBanner banner, Object model, View view, int position) {
-//                RequestOptions options = new RequestOptions()
-//                        .fitCenter()
-//                        .placeholder(new ColorDrawable(Color.BLACK))
-//                        .error(new ColorDrawable(Color.RED))
-//                        .priority(Priority.HIGH);
-//
-//
-//                String url = (String)imageUrlBeanList.get(position).getXBannerUrl();
-//                Glide.with(getApplicationContext())
-//                        .load(url)
-//                        .placeholder(R.drawable.default_image)
-//                        .error(R.drawable.default_image)
-//                        .into((ImageView) view);
-//                Glide.with(getApplicationContext())
-//                        .load(url)
-//                        .apply(options)
-//                        //.listener(mRequestListener)
-//                        .into((ImageView) view);
-//                Toast.makeText(NewsDetailActivity.this, position + " " + url, Toast.LENGTH_SHORT).show();
-//                System.out.println("NewsDetail: " + position + " " + url);
-//            }
-//        });
+        }
+        else {
+            xBanner.setData(imagesList, null);
+            xBanner.loadImage(new XBanner.XBannerAdapter() {
+                @Override
+                public void loadBanner(XBanner banner, Object model, View view, int position) {
+                    RequestOptions options = new RequestOptions()
+                            //.centerCrop()
+                            .placeholder(new ColorDrawable(Color.BLACK))
+                            .error(new ColorDrawable(Color.RED))
+                            .centerCrop()
+                            .priority(Priority.HIGH);
+                    Glide.with(NewsDetailActivity.this)
+                            .load(imagesList.get(position))
+                            .apply(options)
+                            .into((ImageView) view);
+                    Toast.makeText(NewsDetailActivity.this, position + " " + imagesList.get(position), Toast.LENGTH_SHORT).show();
+                    System.out.println("NewsDetail: " + position + " " + imagesList.get(position));
+                }
+            }
+            );
+        }
     }
 
     public void initVideoView(){
