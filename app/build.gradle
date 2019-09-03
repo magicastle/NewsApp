@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.mob.sdk'
 
 android {
     compileSdkVersion 29
@@ -61,4 +62,25 @@ dependencies {
     implementation 'com.billy.android:smart-swipe:1.0.7'
 //compat for android x
     implementation 'com.billy.android:smart-swipe-x:1.0.0'
+}
+
+MobSDK {
+    appKey "2c4c912f7085d"
+    appSecret "2c4c912f7085d"
+    ShareSDK {
+        //平台配置信息
+        devInfo {
+            Wechat {
+                appId "wx023a321a3007afe2"
+                appSecret "fda0b67a9f93f5d3d40e8e99c4a4805b"
+            }
+
+//            SinaWeibo {
+//                appKey "568898243"
+//                appSecret "38a4f8204cc784f81f9f0daaf31e02e3"
+//                callbackUri "http://www.sharesdk.cn"
+//                shareByAppClient true
+//            }
+        }
+    }
 }
