@@ -315,6 +315,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_collections){
             startActivity(new Intent(this, CollectionActivity.class));
         } else if (id == R.id.nav_settings) {
+            Variable.settingChanged = false;
             startActivityForResult(new Intent(this, SettingActivity.class), ACTIVITY_TYPE_SETTING);
         } else if (id == R.id.nav_share) {
 

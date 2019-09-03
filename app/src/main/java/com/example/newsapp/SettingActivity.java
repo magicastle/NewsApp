@@ -59,7 +59,6 @@ public class SettingActivity extends AppCompatActivity implements PreferenceFrag
         }
 
         // init flag
-        Variable.settingChanged = false;
     }
 
     @Override
