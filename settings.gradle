@@ -1,1 +1,1 @@
-include ':app', ':channellib'
+include ':app', ':channellib', ':materialSearchBar'

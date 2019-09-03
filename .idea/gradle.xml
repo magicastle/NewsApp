@@ -10,6 +10,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/channellib" />
+            <option value="$PROJECT_DIR$/materialSearchBar" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
