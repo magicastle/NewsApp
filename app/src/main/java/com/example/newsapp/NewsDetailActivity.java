@@ -179,7 +179,7 @@ public class NewsDetailActivity extends AppCompatActivity {
 
 
                 String url = (String)imageUrlBeanList.get(position).getXBannerUrl();
-                Glide.with(NewsDetailActivity.this)
+                Glide.with(getApplicationContext())
                         .load(url)
                         .apply(options)
                         .listener(mRequestListener)
