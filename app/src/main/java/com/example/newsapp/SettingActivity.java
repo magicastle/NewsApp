@@ -57,9 +57,6 @@ public class SettingActivity extends AppCompatActivity implements PreferenceFrag
                 .replace(R.id.fragment_container, fragment, SettingsFragment.FRAGMENT_TAG)
                 .commit();
         }
-
-        // init flag
-        Variable.settingChanged = false;
     }
 
     @Override

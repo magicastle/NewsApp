@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/activity_news"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -31,6 +32,27 @@
 
             </com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer>
 
+            <!--<com.youth.banner.Banner-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="200dp">-->
+
+            <!--</com.youth.banner.Banner>-->
+
+            <com.stx.xhb.androidx.XBanner
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/xbanner"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                app:AutoPlayTime="3000"
+                app:pointsContainerBackground="#44aaaaaa"
+                app:pointsPosition="RIGHT"
+                app:tipTextSize="12sp"
+                app:isShowNumberIndicator="true"
+                app:isShowIndicatorOnlyOne="true"
+                app:pageChangeDuration="800"/>
+
+            <!--app:pointNormal="@drawable/shape_noraml"-->
+            <!--app:pointSelect="@drawable/shape_selected"-->
             <ImageView
                 android:id="@+id/news_image"
                 android:layout_width="match_parent"

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,14 +28,20 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.*;
 import com.bumptech.glide.request.target.Target;
+import com.example.newsapp.bean.ImageUrlBean;
 import com.example.newsapp.database.NewsCollectionsDao;
 import com.example.newsapp.model.SingleNews;
 import com.mob.MobSDK;
 
 
+import com.example.newsapp.util.Variable;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import com.stx.xhb.androidx.XBanner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 import cn.sharesdk.onekeyshare.OnekeyShare;
@@ -53,6 +60,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     private NewsCollectionsDao collectionsDao = new NewsCollectionsDao();
     private StandardGSYVideoPlayer videoPlayer;
     private OrientationUtils orientationUtils;
+    private XBanner xBanner;
 
 
     @Override
@@ -104,8 +112,20 @@ public class NewsDetailActivity extends AppCompatActivity {
         share.setOnClickListener(viewClickListener);
         collection.setOnClickListener(viewClickListener);
 
-        initImageView();
-        initVideoView();
+        xBanner = findViewById(R.id.xbanner);
+        videoPlayer = findViewById(R.id.video_player);
+        imageView=findViewById(R.id.news_image);
+
+        // tmp
+        imageView.setVisibility(View.GONE);
+        if(Variable.saveStreamMode){
+            videoPlayer.setVisibility(View.INVISIBLE);
+        }
+        else {
+            initBanner();
+            initVideoView();
+//            initImageView();
+        }
 
         SmartSwipe.wrap(this)
                 .addConsumer(new ActivitySlidingBackConsumer(this))
@@ -117,9 +137,62 @@ public class NewsDetailActivity extends AppCompatActivity {
 
     }
 
+    public void initBanner(){
+        String[] images = news.getImage();
+        List<ImageUrlBean> imageUrlBeanList = new ArrayList<>();
+        for(String image : images){
+            imageUrlBeanList.add(new ImageUrlBean(image));
+        }
+//        xBanner.setAutoPlayAble(false);
+        xBanner.setBannerData(imageUrlBeanList);
+        xBanner.loadImage(new XBanner.XBannerAdapter() {
+            @Override
+            public void loadBanner(XBanner banner, Object model, View view, int position) {
+                RequestListener mRequestListener = new RequestListener() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
+                        //Log.d("NewsDetailActivity", "onException: " + e.toString() + "  model:" + model + " isFirstResource: " + isFirstResource);
+                        imageView.setImageResource(R.mipmap.ic_launcher);
+                        return false;
+                    }
+                    @Override
+                    public boolean onResourceReady(Object resource, Object model, Target target, DataSource dataSource, boolean isFirstResource) {
+                        // Log.e("NewsDetailActivity",  "model:"+model+" isFirstResource: "+isFirstResource);
+
+                        ViewGroup.LayoutParams params = imageView.getLayoutParams();
+                        int vw = imageView.getWidth() - imageView.getPaddingLeft() - imageView.getPaddingRight();
+                        float scale = (float) vw /(float) (((Drawable) resource).getIntrinsicWidth());
+                        int vh = Math.round(((Drawable) resource).getIntrinsicHeight() * scale);
+                        params.height=vh + imageView.getPaddingTop()+imageView.getPaddingBottom();
+                        imageView.setLayoutParams(params);
+//                        Toast.makeText(NewsDetailActivity.this, position+"", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                };
+                RequestOptions options = new RequestOptions()
+                        .fitCenter()
+                        .placeholder(new ColorDrawable(Color.BLACK))
+                        .error(new ColorDrawable(Color.RED))
+                        .priority(Priority.HIGH);
+
+
+                String url = (String)imageUrlBeanList.get(position).getXBannerUrl();
+                Glide.with(getApplicationContext())
+                        .load(url)
+                        .apply(options)
+                        .listener(mRequestListener)
+                        .into((ImageView) view);
+//                //在此处使用图片加载框架加载图片，demo中使用glide加载，可替换成自己项目中的图片加载框架
+//                String url = "https://photo.tuchong.com/" + listBean.getImages().get(0).getUser_id() + "/f/" + listBean.getImages().get(0).getImg_id() + ".jpg";
+//                Glide.with(this).load(url).placeholder(R.drawable.default_image).error(R.drawable.default_image).into((ImageView) view);
+                Toast.makeText(NewsDetailActivity.this, position + " " + url, Toast.LENGTH_SHORT).show();
+                System.out.println("NewsDetail: " + position + " " + url);
+            }
+        });
+    }
+
     public void initVideoView(){
         String videoUrl = news.getVideo();
-        videoPlayer = findViewById(R.id.video_player);
         if(videoUrl.equals("")){
             videoPlayer.setVisibility(View.INVISIBLE);
         }
@@ -153,12 +226,10 @@ public class NewsDetailActivity extends AppCompatActivity {
                 }
             });
             videoPlayer.startPlayLogic();
-
         }
     }
 
     public void initImageView(){
-        imageView=findViewById(R.id.news_image);
         String urls[]= news.getImage();//images lists
         if(urls.length>0)
         {

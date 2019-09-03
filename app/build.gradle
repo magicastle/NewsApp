@@ -65,6 +65,9 @@ dependencies {
     implementation 'com.billy.android:smart-swipe-x:1.0.0'
     implementation project(path: ':materialSearchBar')
     implementation 'com.shuyu:GSYVideoPlayer:7.1.0'
+
+    implementation 'com.github.xiaohaibin:XBanner:androidx_v1.0.2'
+    implementation 'com.youth.banner:banner:1.4.10'
 }
 
 MobSDK {

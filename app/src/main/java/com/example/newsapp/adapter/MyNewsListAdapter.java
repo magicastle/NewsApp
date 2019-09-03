@@ -27,6 +27,7 @@ import com.example.newsapp.R;
 import com.example.newsapp.database.NewsHistoryDao;
 import com.example.newsapp.model.SingleNews;
 import com.example.newsapp.util.Constant;
+import com.example.newsapp.util.Variable;
 
 import java.util.List;
 
@@ -119,7 +120,7 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             String urls[]= news.getImage();//images lists
 
-            if(urls.length>0)
+            if(urls.length>0 && !Variable.saveStreamMode)
             {
                 RequestListener mRequestListener = new RequestListener() {
                     @Override

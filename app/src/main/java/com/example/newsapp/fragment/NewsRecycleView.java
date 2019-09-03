@@ -237,6 +237,7 @@ public class NewsRecycleView extends Fragment {
                         return;
                     }
 
+                    errorLayout.setVisibility(View.GONE);
                     // 成功返回内容，更新 newsList
                     if(category.equals("推荐")){
                         /*
@@ -299,7 +300,6 @@ public class NewsRecycleView extends Fragment {
                 if(newsList.size() == 0){
                     showErrorMessage("network error", "retry...");
                 }
-                Toast.makeText(getActivity(), "Load error... maybe retry...", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -317,5 +317,4 @@ public class NewsRecycleView extends Fragment {
             }
         });
     }
-
 }
