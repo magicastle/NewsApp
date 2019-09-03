@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setNightMode();
+        initSetting();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity
         initView();
     }
 
-    public void setNightMode(){
+    public void initSetting(){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if(sharedPreferences.getBoolean("night_mode", false)){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity
         else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+        Variable.saveStreamMode = sharedPreferences.getBoolean("save_stream_mode", false);
     }
 
     public void initData(){
@@ -169,15 +170,6 @@ public class MainActivity extends AppCompatActivity
                 if(enabled){
                 }
                 else{
-//                    if(searchBar.getText().equals("")){
-//                        /*
-//                            为了实现，当用户手动将搜索框清空为0 退出searchBar时，搜索内容转为关键字为空的情形
-//                            添加了当搜索状态转变，即用户点击返回按钮时 updateNewsTabs, words = ""
-//                         */
-//                        Toast.makeText(MainActivity.this, "text change to null", Toast.LENGTH_SHORT).show();
-//                        words = "";
-//                        updateNewsTabs();
-//                    }
                 }
             }
 
@@ -208,20 +200,20 @@ public class MainActivity extends AppCompatActivity
         //restore last queries from disk
         searchBar.setLastSuggestions(historyStringList);
         //Inflate menu and setup OnMenuItemClickListener
-        searchBar.inflateMenu(R.menu.main);
-        searchBar.getMenu().setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                int id = item.getItemId();
-                if (id == R.id.action_search){
-                    //startActivityForResult(new Intent(MainActivity.globalContext, SearchActivity.class), ACTIVITY_TYPE_SEACHER);
-                }
-                if (id == R.id.action_settings) {
-                    return true;
-                }
-                return false;
-            }
-        });
+//        searchBar.inflateMenu(R.menu.main);
+//        searchBar.getMenu().setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                int id = item.getItemId();
+//                if (id == R.id.action_search){
+//                    //startActivityForResult(new Intent(MainActivity.globalContext, SearchActivity.class), ACTIVITY_TYPE_SEACHER);
+//                }
+//                if (id == R.id.action_settings) {
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
     }
 
     public void updateNewsTabs(){

@@ -31,6 +31,7 @@ import com.example.newsapp.database.NewsCollectionsDao;
 import com.example.newsapp.model.SingleNews;
 
 
+import com.example.newsapp.util.Variable;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
@@ -106,8 +107,16 @@ public class NewsDetailActivity extends AppCompatActivity {
         share.setOnClickListener(viewClickListener);
         collection.setOnClickListener(viewClickListener);
 
-        initImageView();
-        initVideoView();
+        videoPlayer = findViewById(R.id.video_player);
+        imageView=findViewById(R.id.news_image);
+        if(Variable.saveStreamMode){
+            videoPlayer.setVisibility(View.INVISIBLE);
+            imageView.setVisibility(View.GONE);
+        }
+        else {
+            initVideoView();
+            initImageView();
+        }
 
         SmartSwipe.wrap(this)
                 .addConsumer(new ActivitySlidingBackConsumer(this))
@@ -121,7 +130,6 @@ public class NewsDetailActivity extends AppCompatActivity {
 
     public void initVideoView(){
         String videoUrl = news.getVideo();
-        videoPlayer = findViewById(R.id.video_player);
         if(videoUrl.equals("")){
             videoPlayer.setVisibility(View.INVISIBLE);
         }
@@ -155,12 +163,10 @@ public class NewsDetailActivity extends AppCompatActivity {
                 }
             });
             videoPlayer.startPlayLogic();
-
         }
     }
 
     public void initImageView(){
-        imageView=findViewById(R.id.news_image);
         String urls[]= news.getImage();//images lists
         if(urls.length>0)
         {
