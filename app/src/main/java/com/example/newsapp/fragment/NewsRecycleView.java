@@ -120,6 +120,7 @@ public class NewsRecycleView extends Fragment {
                     historyDao.add(
                             news.getNewsID(),
                             news.getImageString(),
+                            news.getVideo(),
                             news.getPublishTime(),
                             news.getPublisher(),
                             news.getTitle(),
@@ -181,8 +182,8 @@ public class NewsRecycleView extends Fragment {
              */
             keywordsList = new ArrayList<>();
             keywordsList.addAll(historyDao.getHistoryBrowseKeyWords());
-            keywordsList.addAll(collectionsDao.getHistoryBrowseKeyWords());
-            System.out.println(keywordsList);
+            keywordsList.addAll(collectionsDao.getCollectionsKeyWords());
+            System.out.println("keywordlist" + keywordsList);
 
             keywordsIndex = 0;
         }
@@ -194,6 +195,7 @@ public class NewsRecycleView extends Fragment {
         if(this.category.equals("推荐")){
             if(keywordsIndex < keywordsList.size()) {
                 this.queryWords = keywordsList.get(keywordsIndex);
+                System.out.println("goint to query  " + keywordsList.get(keywordsIndex));
             }
             else{
                 this.queryWords = "";

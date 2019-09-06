@@ -325,6 +325,7 @@ public class MainActivity extends AppCompatActivity
         super.onDestroy();
         // save suggestions(history) to database
         historyStringList = searchBar.getLastSuggestions();
+        searchHistoryDao.removeAll();
         for(String suggestions : historyStringList){
             searchHistoryDao.add(suggestions);
         }

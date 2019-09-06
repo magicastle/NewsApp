@@ -204,6 +204,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         }
     }
 
+    /*
     public void initImageView(){
         String urls[]= news.getImage();//images lists
         if(urls.length>0)
@@ -246,6 +247,33 @@ public class NewsDetailActivity extends AppCompatActivity {
         }
         Toast.makeText(this, "image"+urls.length , Toast.LENGTH_LONG).show();
     }
+    */
+
+    @Override
+    public void onBackPressed() {
+        if (GSYVideoManager.backFromWindowFull(this)) {
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        GSYVideoManager.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GSYVideoManager.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        GSYVideoManager.releaseAllVideos();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -268,6 +296,7 @@ public class NewsDetailActivity extends AppCompatActivity {
                         collectionsDao.add(
                                 news.getNewsID(),
                                 news.getImageString(),
+                                news.getVideo(),
                                 news.getPublishTime(),
                                 news.getPublisher(),
                                 news.getTitle(),

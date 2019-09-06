@@ -19,10 +19,11 @@ public class NewsCollectionsDao {
     public void addInitData(){
     }
 
-    public boolean add(String newsID, String image, String publishTime, String publisher, String title, String content, String keyWords){
+    public boolean add(String newsID, String image, String video, String publishTime, String publisher, String title, String content, String keyWords){
         ContentValues values = new ContentValues();
         values.put(NewsCollectionsTable.ID, newsID);
         values.put(NewsCollectionsTable.IMAGE, image);
+        values.put(NewsCollectionsTable.VIDEO, video);
         values.put(NewsCollectionsTable.PUBLISHTIME, publishTime);
         values.put(NewsCollectionsTable.PUBLISHER, publisher);
         values.put(NewsCollectionsTable.TITLE, title);
@@ -54,6 +55,7 @@ public class NewsCollectionsDao {
 
             bean.setNewsID(cursor.getString(NewsCollectionsTable.ID_ID));
             bean.setImage(cursor.getString(NewsCollectionsTable.ID_IMAGE));
+            bean.setVideo(cursor.getString(NewsCollectionsTable.ID_VIDEO));
             bean.setPublishTime(cursor.getString(NewsCollectionsTable.ID_PUBLISHTIME));
             bean.setPublisher(cursor.getString(NewsCollectionsTable.ID_PUBLISHER));
             bean.setTitle(cursor.getString(NewsCollectionsTable.ID_TITLE));
@@ -73,11 +75,12 @@ public class NewsCollectionsDao {
         int result = db.delete(NewsCollectionsTable.TABLENAME, null, null);
         return result != -1;
     }
-    public List<String> getHistoryBrowseKeyWords(){
+    public List<String> getCollectionsKeyWords(){
         List<String> res = new ArrayList<>();
         Cursor cursor = db.query(NewsCollectionsTable.TABLENAME, null, null, null, null, null, null);
         if(cursor.moveToLast()){
-            String[] ss = cursor.getString(6).split(",");
+            System.out.println("collection keyword" + cursor.getString(NewsCollectionsTable.ID_KEYWORDS));
+            String[] ss = cursor.getString(NewsCollectionsTable.ID_KEYWORDS).split(",");
             for(int i = 0; i < Math.min(2, ss.length);i ++)
                 res.add(ss[i]);
         }

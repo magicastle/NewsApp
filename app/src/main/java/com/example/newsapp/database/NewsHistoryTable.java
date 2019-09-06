@@ -11,6 +11,7 @@ public class NewsHistoryTable {
      */
     public static final String ID = "newsID";
     public static final String IMAGE = "image";
+    public static final String VIDEO = "video";
     public static final String PUBLISHTIME = "publishTime";
     public static final String PUBLISHER = "publisher";
     public static final String TITLE = "title";
@@ -22,11 +23,12 @@ public class NewsHistoryTable {
      */
     public static final int ID_ID = 0;
     public static final int ID_IMAGE = 1;
-    public static final int ID_PUBLISHTIME = 2;
-    public static final int ID_PUBLISHER = 3;
-    public static final int ID_TITLE = 4;
-    public static final int ID_CONSTANT = 5;
-    public static final int ID_KEYWORDS = 6;
+    public static final int ID_VIDEO = 2;
+    public static final int ID_PUBLISHTIME = 3;
+    public static final int ID_PUBLISHER = 4;
+    public static final int ID_TITLE = 5;
+    public static final int ID_CONSTANT = 6;
+    public static final int ID_KEYWORDS = 7;
 
     /**
      * 创建表
@@ -34,6 +36,7 @@ public class NewsHistoryTable {
     public static final String CREATE_TABLE = "create table if not exists " + TABLENAME + "(" +
             ID + " text primary key unique, " +
             IMAGE + " text, " +
+            VIDEO + " text, " +
             PUBLISHTIME + " text, " +
             PUBLISHER + " text, " +
             TITLE + " text, " +

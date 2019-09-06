@@ -30,6 +30,7 @@ public class HistoryActivity extends BaseActivity{
     private RecyclerView recyclerView;
     private MyNewsListAdapter adapter;
 
+    public HistoryActivity(){}
 
     @Override
     public void onCreate(Bundle savedInstanceState ) {
@@ -52,7 +53,7 @@ public class HistoryActivity extends BaseActivity{
                     historyList.get(i).getTitle(),
                     historyList.get(i).getContent(),
                     null,
-                    null,
+                    historyList.get(i).getVideo(),
                     historyList.get(i).getNewsID(),
                     null,
                     null,

@@ -10,6 +10,7 @@ public class NewsCollectionsOrHistoryBean {
 
     private String newsID;
     private String image;
+    private String video;
     private String publishTime;
     private String publisher;
     private String title;
@@ -62,6 +63,12 @@ public class NewsCollectionsOrHistoryBean {
         return this.image;
     }
 
+    public void setVideo(String video){
+        this.video = video;
+    }
+    public String getVideo(){
+        return this.video;
+    }
     public void setKeywords(String keywords){this.keywords = keywords;}
     public String getKeywords(){return this.keywords;}
 }
