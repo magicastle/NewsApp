@@ -140,10 +140,16 @@ public class SingleNews implements Serializable {
         else {
             images=new String[0];
         }
-
+        for(int i = 0;i < images.length;i ++){
+            images[i].trim();
+            images[i] = trimAllSpace(images[i]);
+        }
         return images;
     }
 
+    public static String trimAllSpace(String str) {
+        return str == null ? str : str.replaceAll("^[\\s　]*|[\\s　]*$", "");
+    }
 }
 
 class ScoreAndWord implements Serializable{

@@ -26,14 +26,18 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public boolean onPreferenceTreeClick(Preference preference) {
         if(preference.getKey().equals("night_mode")){
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-            if(sharedPreferences.getBoolean(preference.getKey(), false)){
-                Variable.drakMode = AppCompatDelegate.MODE_NIGHT_YES;
-            }
-            else {
-                Variable.drakMode = AppCompatDelegate.MODE_NIGHT_NO;
-            }
+//            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+//            if(sharedPreferences.getBoolean(preference.getKey(), false)){
+//                Variable.darkMode = AppCompatDelegate.MODE_NIGHT_YES;
+//            }
+//            else {
+//                Variable.darkMode = AppCompatDelegate.MODE_NIGHT_NO;
+//            }
             getActivity().recreate();
+        }
+        if (preference.getKey().equals("save_stream_mode")){
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            Variable.saveStreamMode = sharedPreferences.getBoolean(preference.getKey(), false);
         }
         Variable.settingChanged = true;
         return super.onPreferenceTreeClick(preference);

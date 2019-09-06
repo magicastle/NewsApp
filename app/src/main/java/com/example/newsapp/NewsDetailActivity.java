@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,14 +28,21 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.*;
 import com.bumptech.glide.request.target.Target;
+import com.example.newsapp.bean.ImageUrlBean;
 import com.example.newsapp.database.NewsCollectionsDao;
 import com.example.newsapp.model.SingleNews;
 import com.mob.MobSDK;
 
 
+import com.example.newsapp.util.Variable;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import com.stx.xhb.xbanner.XBanner;
+//import com.stx.xhb.androidx.XBanner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 import cn.sharesdk.onekeyshare.OnekeyShare;
@@ -53,6 +61,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     private NewsCollectionsDao collectionsDao = new NewsCollectionsDao();
     private StandardGSYVideoPlayer videoPlayer;
     private OrientationUtils orientationUtils;
+    private XBanner xBanner;
 
 
     @Override
@@ -87,7 +96,6 @@ public class NewsDetailActivity extends AppCompatActivity {
         collection=new ImageView(this);
         collection.setId(R.id.myCollection);
         collection.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_border_black_24dp));
-        //getSupportActionBar().setCustomView(collection);
 
         viewClickListener =new View.OnClickListener() {
             @Override
@@ -104,8 +112,19 @@ public class NewsDetailActivity extends AppCompatActivity {
         share.setOnClickListener(viewClickListener);
         collection.setOnClickListener(viewClickListener);
 
-        initImageView();
-        initVideoView();
+        xBanner = findViewById(R.id.xbanner);
+        videoPlayer = findViewById(R.id.video_player);
+        imageView=findViewById(R.id.news_image);
+
+        // tmp
+        imageView.setVisibility(View.GONE);
+        if(Variable.saveStreamMode){
+            videoPlayer.setVisibility(View.INVISIBLE);
+        }
+        else {
+            initBanner();
+            initVideoView();
+        }
 
         SmartSwipe.wrap(this)
                 .addConsumer(new ActivitySlidingBackConsumer(this))
@@ -114,14 +133,43 @@ public class NewsDetailActivity extends AppCompatActivity {
                 //指定可侧滑返回的方向，如：enableLeft() 仅左侧可侧滑返回
                 .enableLeft()
         ;
+    }
 
+    public void initBanner(){
+        String[] images = news.getImage();
+        List<String> imagesList = new ArrayList<>();
+        for(String image : images){
+            imagesList.add(image);
+        }
+        if(imagesList.size() == 0){
+            xBanner.setVisibility(View.GONE);
+
+        }
+        else {
+            xBanner.setData(imagesList, null);
+            xBanner.loadImage(new XBanner.XBannerAdapter() {
+                @Override
+                public void loadBanner(XBanner banner, Object model, View view, int position) {
+                    RequestOptions options = new RequestOptions()
+                            //.centerCrop()
+                            .placeholder(new ColorDrawable(Color.BLACK))
+                            .error(new ColorDrawable(Color.RED))
+                            .centerCrop()
+                            .priority(Priority.HIGH);
+                    Glide.with(NewsDetailActivity.this)
+                            .load(imagesList.get(position))
+                            .apply(options)
+                            .into((ImageView) view);
+                }
+            }
+            );
+        }
     }
 
     public void initVideoView(){
         String videoUrl = news.getVideo();
-        videoPlayer = findViewById(R.id.video_player);
         if(videoUrl.equals("")){
-            videoPlayer.setVisibility(View.INVISIBLE);
+            videoPlayer.setVisibility(View.GONE);
         }
         else{
             //String videoUrl = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
@@ -153,12 +201,11 @@ public class NewsDetailActivity extends AppCompatActivity {
                 }
             });
             videoPlayer.startPlayLogic();
-
         }
     }
 
+    /*
     public void initImageView(){
-        imageView=findViewById(R.id.news_image);
         String urls[]= news.getImage();//images lists
         if(urls.length>0)
         {
@@ -200,6 +247,33 @@ public class NewsDetailActivity extends AppCompatActivity {
         }
         Toast.makeText(this, "image"+urls.length , Toast.LENGTH_LONG).show();
     }
+    */
+
+    @Override
+    public void onBackPressed() {
+        if (GSYVideoManager.backFromWindowFull(this)) {
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        GSYVideoManager.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GSYVideoManager.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        GSYVideoManager.releaseAllVideos();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -222,6 +296,7 @@ public class NewsDetailActivity extends AppCompatActivity {
                         collectionsDao.add(
                                 news.getNewsID(),
                                 news.getImageString(),
+                                news.getVideo(),
                                 news.getPublishTime(),
                                 news.getPublisher(),
                                 news.getTitle(),

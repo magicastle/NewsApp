@@ -120,6 +120,7 @@ public class NewsRecycleView extends Fragment {
                     historyDao.add(
                             news.getNewsID(),
                             news.getImageString(),
+                            news.getVideo(),
                             news.getPublishTime(),
                             news.getPublisher(),
                             news.getTitle(),
@@ -181,8 +182,8 @@ public class NewsRecycleView extends Fragment {
              */
             keywordsList = new ArrayList<>();
             keywordsList.addAll(historyDao.getHistoryBrowseKeyWords());
-            keywordsList.addAll(collectionsDao.getHistoryBrowseKeyWords());
-            System.out.println(keywordsList);
+            keywordsList.addAll(collectionsDao.getCollectionsKeyWords());
+            System.out.println("keywordlist" + keywordsList);
 
             keywordsIndex = 0;
         }
@@ -194,6 +195,7 @@ public class NewsRecycleView extends Fragment {
         if(this.category.equals("推荐")){
             if(keywordsIndex < keywordsList.size()) {
                 this.queryWords = keywordsList.get(keywordsIndex);
+                System.out.println("goint to query  " + keywordsList.get(keywordsIndex));
             }
             else{
                 this.queryWords = "";
@@ -237,6 +239,7 @@ public class NewsRecycleView extends Fragment {
                         return;
                     }
 
+                    errorLayout.setVisibility(View.GONE);
                     // 成功返回内容，更新 newsList
                     if(category.equals("推荐")){
                         /*
@@ -299,7 +302,6 @@ public class NewsRecycleView extends Fragment {
                 if(newsList.size() == 0){
                     showErrorMessage("network error", "retry...");
                 }
-                Toast.makeText(getActivity(), "Load error... maybe retry...", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -317,5 +319,4 @@ public class NewsRecycleView extends Fragment {
             }
         });
     }
-
 }

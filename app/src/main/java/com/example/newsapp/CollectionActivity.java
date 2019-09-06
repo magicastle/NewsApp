@@ -28,6 +28,8 @@ public class CollectionActivity extends BaseActivity{
     private MyNewsListAdapter adapter;
 
 
+    public CollectionActivity(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
@@ -49,7 +51,7 @@ public class CollectionActivity extends BaseActivity{
                     collectionsList.get(i).getTitle(),
                     collectionsList.get(i).getContent(),
                     null,
-                    null,
+                    collectionsList.get(i).getVideo(),
                     collectionsList.get(i).getNewsID(),
                     null,
                     null,
