@@ -107,10 +107,13 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         // 读过变色
         if(listType == Constant.LIST_TYPE_NEWS && historyDao.contain(news.getNewsID())){
-            holder.linearLayout.setBackgroundColor(R.color.colorReaded);
+        //    holder.linearLayout.setBackgroundColor(R.color.colorReaded);
         //    holder.title.setBackgroundColor(R.color.grey);
         //    holder.contentAbstract.setBackgroundColor(R.color.grey);
         //    holder.publishInfo.setBackgroundColor(R.color.grey);
+            holder.title.setTextColor(R.color.grey);
+            holder.contentAbstract.setTextColor(R.color.grey);
+            holder.publishInfo.setTextColor(R.color.grey);
         }
 
         if(!holder.newsID.equals(news.getNewsID())){

@@ -52,11 +52,9 @@ public class NewsDetailActivity extends AppCompatActivity {
     private SingleNews news;
     private TextView contentTextView;
     private TextView titleTextView;
+    private TextView publishInfo;
 
     private Switch switchbutton;
-    private ImageView share;
-    private ImageView collection;
-    private View.OnClickListener viewClickListener;
     private NewsCollectionsDao collectionsDao = new NewsCollectionsDao();
     private StandardGSYVideoPlayer videoPlayer;
     private OrientationUtils orientationUtils;
@@ -82,39 +80,16 @@ public class NewsDetailActivity extends AppCompatActivity {
     public void initView(){
         titleTextView = findViewById(R.id.new_detail_title_tv);
         titleTextView.setText(news.getTitle());
+
         contentTextView= findViewById(R.id.new_detail_content_tv);
         contentTextView.setText(news.getContent());
 
-//        share=new ImageView(this);
-//        share.setId(R.id.myShare);
-//        //share.setPadding(60,0,0,0);
-//        share.setImageDrawable(getResources().getDrawable(R.drawable.ic_share_white_24dp));
-//        getSupportActionBar().setCustomView(share);
-
-
-//        collection=new ImageView(this);
-//        collection.setId(R.id.myCollection);
-//        collection.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_border_black_24dp));
-
-//        viewClickListener =new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                switch(view.getId())
-//                {
-//                    case R.id.myShare:
-//                        showShare();
-//                        break;
-//                }
-//            }
-//        };
-
-//        share.setOnClickListener(viewClickListener);
-//        collection.setOnClickListener(viewClickListener);
+        publishInfo = findViewById(R.id.news_detail_publishInfo_tv);
+        publishInfo.setText(news.getPublisher());
 
         xBanner = findViewById(R.id.xbanner);
         videoPlayer = findViewById(R.id.video_player);
 
-        // tmp
         if(Variable.saveStreamMode){
             xBanner.setVisibility(View.GONE);
             videoPlayer.setVisibility(View.GONE);

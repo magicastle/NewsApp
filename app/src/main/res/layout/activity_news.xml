@@ -22,12 +22,22 @@
                 android:textColor="@color/textColorPrimary"
                 android:padding="15dp" />
 
+            <TextView
+                android:id="@+id/news_detail_publishInfo_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:textColor="@color/blue"
+                android:paddingLeft="15dp"
+                android:paddingBottom="10dp"
+                />
+
             <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
                 android:id="@+id/video_player"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 android:paddingBottom="15dp"
                 />
 
@@ -35,8 +45,8 @@
                 android:id="@+id/xbanner"
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 android:paddingBottom="15dp"
                 />
 
