@@ -8,10 +8,13 @@
         app:actionLayout="@layout/menu_relaty"
         />
 
-    <!--<item-->
-        <!--android:id="@+id/share"-->
-        <!--android:title="share" />-->
-
+    <item
+        android:id="@+id/myShare"
+        android:title="share"
+        android:icon="@drawable/ic_menu_share"
+        android:theme="@android:style/Theme.Holo.Light.DarkActionBar"/>
+        app:showAsAction="always"
+        />
 
 </menu>
 
