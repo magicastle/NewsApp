@@ -81,6 +81,24 @@ MobSDK {
                 appId "wx023a321a3007afe2"
                 appSecret "fda0b67a9f93f5d3d40e8e99c4a4805b"
             }
+            WechatMoments {
+                id 5
+                sortId 5
+                appId "wx023a321a3007afe2"
+                appSecret "fda0b67a9f93f5d3d40e8e99c4a4805b"
+                bypassApproval false
+                enable true
+            }
+
+
+            WechatFavorite {
+                id 6
+                sortId 6
+                appId "wx023a321a3007afe2"
+                appSecret "fda0b67a9f93f5d3d40e8e99c4a4805b"
+                bypassApproval false
+                enable true
+            }
 
 //            SinaWeibo {
 //                appKey "568898243"

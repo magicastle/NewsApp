@@ -1,8 +1,11 @@
 package com.example.newsapp;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -20,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.billy.android.swipe.SmartSwipe;
 import com.billy.android.swipe.consumer.ActivitySlidingBackConsumer;
@@ -343,7 +347,11 @@ public class NewsDetailActivity extends AppCompatActivity {
         else
         // imagePath是图片的本地路径，确保SDcard下面存在此张图片
         //换成我们最后的APP图标放在对的路径里
-        oks.setImagePath("/sdcard/test.jpg");
+        {
+            BitmapDrawable draw=(BitmapDrawable) ContextCompat.getDrawable(this,R.drawable.ic_desktop);
+            oks.setImageData(draw.getBitmap());
+        }
+
 
         // url在微信、Facebook等平台中使用
         oks.setUrl(news.getUrl());

@@ -301,16 +301,11 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
             // Handle the camera action
         }
-        //else if (id == R.id.nav_gallery) { }
-        else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_collections){
+        else if (id == R.id.nav_collections){
             startActivity(new Intent(this, CollectionActivity.class));
         } else if (id == R.id.nav_settings) {
             Variable.settingChanged = false;
             startActivityForResult(new Intent(this, SettingActivity.class), ACTIVITY_TYPE_SETTING);
-        } else if (id == R.id.nav_share) {
-
         } else if (id == R.id.nav_history) {
             startActivity(new Intent(this, HistoryActivity.class));
         }
