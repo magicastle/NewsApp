@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.newsapp">
+    package="com.java.wangyan">
 
     <!-- Add internet permision -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".WelcomeActivity"
+        <activity android:name="com.java.wangyan.WelcomeActivity"
             android:theme="@style/WelcomeTheme"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -25,28 +25,28 @@
         </activity>
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.java.wangyan.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity
-            android:name=".NewsDetailActivity"
+            android:name="com.java.wangyan.NewsDetailActivity"
             android:label="NewsDetail"
             />
-        <activity android:name=".NewsChannelActivity"
+        <activity android:name="com.java.wangyan.NewsChannelActivity"
             android:label="Channel Manager"
             />
-        <activity android:name=".CollectionActivity"
+        <activity android:name="com.java.wangyan.CollectionActivity"
             android:label="Collections"
             />
-        <activity android:name=".HistoryActivity"
+        <activity android:name="com.java.wangyan.HistoryActivity"
             android:label="History"
             />
-        <activity android:name=".SearchActivity"
+        <activity android:name="com.java.wangyan.SearchActivity"
             android:label="Search"
             />
-        <activity android:name=".SettingActivity"
+        <activity android:name="com.java.wangyan.SettingActivity"
             android:label="Settings"
             />
     </application>
