@@ -10,6 +10,10 @@
         android:icon="@drawable/ic_desktop"
         android:label="@string/app_name"
 
+
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
+
         android:usesCleartextTraffic="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
