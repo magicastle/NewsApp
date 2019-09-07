@@ -1,37 +1,24 @@
 package com.example.newsapp;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.billy.android.swipe.SmartSwipe;
 import com.billy.android.swipe.consumer.ActivitySlidingBackConsumer;
 import com.bumptech.glide.*;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.*;
-import com.bumptech.glide.request.target.Target;
-import com.example.newsapp.bean.ImageUrlBean;
 import com.example.newsapp.database.NewsCollectionsDao;
 import com.example.newsapp.model.SingleNews;
-import com.mob.MobSDK;
 
 
 import com.example.newsapp.util.Variable;
@@ -52,7 +39,8 @@ public class NewsDetailActivity extends AppCompatActivity {
     private SingleNews news;
     private TextView contentTextView;
     private TextView titleTextView;
-    private TextView publishInfo;
+    private TextView publisherInfo;
+    private TextView publishTime;
 
     private Switch switchbutton;
     private NewsCollectionsDao collectionsDao = new NewsCollectionsDao();
@@ -84,8 +72,14 @@ public class NewsDetailActivity extends AppCompatActivity {
         contentTextView= findViewById(R.id.new_detail_content_tv);
         contentTextView.setText(news.getContent());
 
-        publishInfo = findViewById(R.id.news_detail_publishInfo_tv);
-        publishInfo.setText(news.getPublisher());
+        publisherInfo = findViewById(R.id.news_detail_publisherInfo_tv);
+        publisherInfo.setText(news.getPublisher());
+
+        publisherInfo = findViewById(R.id.news_detail_publisherInfo_tv);
+        publisherInfo.setText(news.getPublisher());
+
+        publishTime = findViewById(R.id.news_detail_publishTime_tv);
+        publishTime.setText(news.getPublishTime());
 
         xBanner = findViewById(R.id.xbanner);
         videoPlayer = findViewById(R.id.video_player);
