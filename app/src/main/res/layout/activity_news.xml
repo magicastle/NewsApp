@@ -18,57 +18,64 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Title"
-                android:textSize="30dp"
+                android:textSize="24dp"
+                android:textColor="@color/textColorPrimary"
                 android:padding="15dp" />
-            <!--<com.shuyu.gsyvideoplayer.video.GSYADVideoPlayer-->
-                <!--android:id="@+id/video_player"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"/>-->
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/news_detail_publisherInfo_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:textColor="@color/blue"
+                    android:paddingLeft="15dp"
+                    android:paddingBottom="10dp"
+                    />
+
+                <TextView
+                    android:id="@+id/news_detail_publishTime_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:textColor="@color/grey"
+                    android:paddingLeft="5dp"
+                    android:paddingBottom="10dp"
+                    />
+            </LinearLayout>
+
 
             <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
                 android:id="@+id/video_player"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer>
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="15dp"
+                />
 
             <com.stx.xhb.xbanner.XBanner
                 android:id="@+id/xbanner"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
+                android:layout_height="220dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="15dp"
                 />
 
-            <!--</com.stx.xhb.xbanner.XBanner>-->
-
-            <!--<com.stx.xhb.androidx.XBanner-->
-                <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-                <!--android:id="@+id/xbanner"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="180dp"-->
-                <!--app:AutoPlayTime="3000"-->
-                <!--app:pointsContainerBackground="#44aaaaaa"-->
-                <!--app:pointsPosition="RIGHT"-->
-                <!--app:tipTextSize="12sp"-->
-                <!--app:isShowNumberIndicator="true"-->
-                <!--app:isShowIndicatorOnlyOne="true"-->
-                <!--app:pageChangeDuration="800"/>-->
-
-            <!--app:pointNormal="@drawable/shape_noraml"-->
-            <!--app:pointSelect="@drawable/shape_selected"-->
-            <ImageView
-                android:id="@+id/news_image"
-                android:layout_width="match_parent"
-                android:layout_height="360dp"
-                android:layout_margin="15dp"
-                android:scaleType="fitXY"
-                android:adjustViewBounds="true"/>
             <TextView
                 android:id="@+id/new_detail_content_tv"
                 android:text="Content"
-                android:textSize="18dp"
+                android:textSize="16dp"
+                android:textColor="@color/textColorPrimary"
                 android:lineSpacingMultiplier="1.2"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
+                android:paddingBottom="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

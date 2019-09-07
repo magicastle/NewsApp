@@ -84,12 +84,12 @@ public class NewsHistoryDao {
                 res.add(ss[i]);
         }
         if(cursor.moveToPrevious()){
-            String[] ss = cursor.getString(7).split(",");
+            String[] ss = cursor.getString(NewsHistoryTable.ID_KEYWORDS).split(",");
             for(int i = 0; i < Math.min(2, ss.length);i ++)
                 res.add(ss[i]);
         }
         if(cursor.moveToPrevious()){
-            String[] ss = cursor.getString(6).split(",");
+            String[] ss = cursor.getString(NewsHistoryTable.ID_KEYWORDS).split(",");
             for(int i = 0; i < Math.min(2, ss.length);i ++)
                 res.add(ss[i]);
         }

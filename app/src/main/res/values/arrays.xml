@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="news_category_id">
+        <item>news_all</item>
         <item>news_rec</item>
         <item>news_fun</item>
         <item>news_mil</item>
@@ -15,6 +16,7 @@
     </string-array>
 
     <string-array name="news_category_name">
+        <item>ALL</item>
         <item>推荐</item>
         <item>娱乐</item>
         <item>军事</item>

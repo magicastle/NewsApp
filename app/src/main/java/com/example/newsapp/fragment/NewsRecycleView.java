@@ -195,11 +195,15 @@ public class NewsRecycleView extends Fragment {
         if(this.category.equals("推荐")){
             if(keywordsIndex < keywordsList.size()) {
                 this.queryWords = keywordsList.get(keywordsIndex);
-                System.out.println("goint to query  " + keywordsList.get(keywordsIndex));
+//                System.out.println("goint to query  " + keywordsList.get(keywordsIndex));
             }
             else{
                 this.queryWords = "";
             }
+            this.queryCategory = "";
+        }
+        else if(this.category.equals("ALL")){
+            this.queryWords = this.words;
             this.queryCategory = "";
         }
         else{
@@ -246,7 +250,7 @@ public class NewsRecycleView extends Fragment {
                             注意新闻填充逻辑：因为加入了要填满pageNum * pageSize 的限制以及历史信息不填充的限制
                             所以要避免出现为达到要求发生死循环
                          */
-                        System.out.println("Yeah ,tuijian " + queryWords + " " + queryCategory);
+//                        System.out.println("Yeah ,tuijian " + queryWords + " " + queryCategory);
                         // 避免推荐列表重复，添加newsIDSet control
                         int tmp = 0;
                         for (SingleNews news : requestList){
@@ -258,7 +262,7 @@ public class NewsRecycleView extends Fragment {
                              */
                             String id = news.getNewsID();
                             if(!newsIDSet.contains(id) && !historyDao.contain(id) && newsList.size() < pageNum *pageSize){
-                                System.out.println("add news");
+//                                System.out.println("add news");
                                 newsIDSet.add(id);
                                 newsList.add(news);
                                 if(!queryWords.equals(""))

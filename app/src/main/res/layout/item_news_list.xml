@@ -6,7 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools"
 
 
-
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="8dp"
@@ -28,6 +27,7 @@
             android:id="@+id/item_newsTitle"
             android:textStyle="bold"
             android:textSize="17dp"
+            android:textColor="@color/textColorPrimary"
             android:paddingTop="10dp"
             android:paddingRight="10dp"
             android:paddingLeft="10dp"
@@ -61,42 +61,18 @@
                 android:paddingRight="10dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
+                android:textColor="@color/textColorPrimary"
                 android:textSize="13sp" />
 
 
         </LinearLayout>
 
-        <!--<RelativeLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--&gt;-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/item_newsAbstract"-->
-                <!--android:layout_width="300dp"-->
-                <!--android:layout_height="wrap_content"-->
-
-                <!--android:maxLines="4"-->
-                <!--android:paddingLeft="10dp"-->
-                <!--android:paddingTop="5dp"-->
-                <!--android:paddingRight="10dp"-->
-                <!--android:paddingBottom="5dp"-->
-                <!--android:textSize="13dp" />-->
-
-            <!--<ImageView-->
-                <!--android:id="@+id/image_right"-->
-                <!--android:layout_width="30dp"-->
-                <!--android:layout_height="60dp"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:src="@drawable/ic_launcher_background"-->
-                <!--android:layout_toRightOf="@id/item_newsAbstract"-->
-                <!--/>-->
-        <!--</RelativeLayout>-->
 
         <TextView
             android:id="@+id/item_newsPublishInfo"
             android:textSize="12dp"
             android:textStyle="italic"
+            android:textColor="@color/textColorPrimary"
             android:paddingTop="5dp"
             android:paddingRight="10dp"
             android:paddingLeft="10dp"
@@ -106,13 +82,3 @@
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
-
-
-<!--
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="4dp"
-    android:layout_marginTop="4dp"
-    android:background="@color/viewBackground"
-    app:cardElevation="1dp"
-    -->
