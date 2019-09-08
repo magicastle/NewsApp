@@ -87,7 +87,7 @@ public class HistoryActivity extends BaseActivity{
         adapter.setOnItemClickListener(new MyNewsListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent(MainActivity.mainActivity, NewsDetailActivity.class);
+                Intent intent = new Intent(HistoryActivity.this, NewsDetailActivity.class);
                 SingleNews news= newsList.get(position);
                 intent.putExtra("news", news);
 
